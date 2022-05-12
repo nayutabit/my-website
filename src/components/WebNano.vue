@@ -26,13 +26,13 @@ export default {
 
 <style scoped lang='less'>
 .nano{
-    position: absolute;
-    display: flex;
-    align-items: center;
-    left:50px;
-    top:30px;
-    width: 60px;
-    height:40px;
-    fill:#fff;
+  position: absolute;
+  display: flex;
+  align-items: center;
+  left:50px;
+  top:30px;
+  width: 60px;
+  height:40px;
+  fill:#fff;
 }
 </style>

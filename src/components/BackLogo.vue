@@ -157,19 +157,19 @@ export default {
      animation:waterAction1 0.4s 3.4s forwards;
     }
     .left-water2{
-      transform-origin: right 90%;
-     visibility: hidden;
-     animation:waterAction2 0.4s 3.4s forwards;
+      transform-origin: right 100%;
+    visibility: hidden;
+    animation:waterAction2 0.4s 3.4s forwards;
     }
     .left-water3{
       transform-origin: right 70%;
      visibility: hidden;
-     animation:waterAction3 0.4s 3.4s forwards;
+      animation:waterAction3 0.4s 3.4s forwards;
     }    
     .right-water1{
       visibility: hidden;
       transform-origin:left 30%;
-      animation:waterAction4 0.4s 3.4s forwards;
+     animation:waterAction4 0.4s 3.4s forwards;
     }
     .right-water2{
      visibility: hidden;
@@ -188,15 +188,15 @@ export default {
 @keyframes waterAction1{
   0%{
     visibility: visible;
-     transform:translate(-5px,-12.61px) scale(0.5,2);
+     transform:translate(-5px,-16.61px) scale(0.5,2);
   }
   50%{
     visibility: visible;
-    transform:translate(-9.93px,-12.61px) scale(1,1);
+    transform:translate(-5px,-16.61px) scale(1,1);
     opacity:0.8;
   }
   100%{
-    transform:translate(90px,-12.61px) scale(4,0.2);
+    transform:translate(90px,-20.61px) scale(4,0.2);
     opacity: 0.2;
   }
 }
@@ -204,15 +204,15 @@ export default {
 @keyframes waterAction2{
   0%{
     visibility: visible;
-     transform:translate(-20px,-12.61px) scale(0.1,4);
+     transform:translate(-25px,-16.61px) scale(0.1,2);
   }
   50%{
     visibility: visible;
-    transform:translate(-5.93px,-12.61px) scale(1,1.5);
+    transform:translate(-5px,-16.61px) scale(1,1);
     opacity:0.8;
   }
   100%{
-    transform:translate(120px,-12.61px) scale(4,0.2);
+    transform:translate(100px,-20.61px) scale(4,0.2);
     opacity: 0.2;
   }
 }
@@ -220,15 +220,15 @@ export default {
 @keyframes waterAction3{
   0%{
     visibility: visible;
-     transform:translate(-25px,-12.61px) scale(0.1,2);
+     transform:translate(-30px,-16.61px) scale(0.1,1);
   }
   50%{
     visibility: visible;
-    transform:translate(-5.93px,-12.61px) scale(1,1);
+    transform:translate(-5.93px,-16.61px) scale(1,1);
     opacity:0.8;
   }
   100%{
-    transform:translate(70px,-12.61px) scale(3,0.2);
+    transform:translate(80px,-16.61px) scale(3,0.2);
     opacity: 0.2;
   }
 }
@@ -236,15 +236,15 @@ export default {
 @keyframes waterAction4{
   0%{
     visibility: visible;
-     transform:translate(10px ,-16.61px) scale(0.2,2);
+     transform:translate(20px ,-16.61px) scale(0.1,1.5);
   }
   50%{
     visibility: visible;
-    transform:translate(-4.93px ,-16.61px) scale(1,1);
+    transform:translate(-8.93px ,-16.61px) scale(1,1);
     opacity:0.8;
   }
   100%{
-    transform:translate(-124.93px ,-16.61px) scale(3,0.2);
+      transform:translate(-8.93px ,-16.61px) scale(1,1);
     opacity: 0.2;
   }
 }
@@ -252,15 +252,15 @@ export default {
 @keyframes waterAction5{
   0%{
     visibility: visible;
-     transform:translate(20px ,-16.61px) scale(0.1,2);
+     transform:translate(25px ,-13.61px) scale(0.1,1);
   }
   50%{
     visibility: visible;
-    transform:translate(-4.93px ,-16.61px) scale(1,1);
+    transform:translate(-4.93px ,-13.61px) scale(1,1);
     opacity:0.8;
   }
   100%{
-    transform:translate(-124.93px ,-16.61px) scale(3,0.2);
+    transform:translate(-115.93px ,-13.61px) scale(3,0.2);
     opacity: 0.2;
   }
 }
