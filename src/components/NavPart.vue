@@ -1,8 +1,8 @@
 <template>
-  <div class='nav'>
+  <div class='nav' >
     <!-- 菜单图标：点击显示和隐藏显示所有导航标题 --> 
     <div class='nav-icon'>
-      <svg  viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" @click="showWord=!showWord" :class='startBeat'>
+      <svg  viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" @click="changeShow" :class='startBeat'>
         <path
           d="M380.194762 56.65699H34.370367A34.443495 34.443495 0 0 0 0 91.173614v365.642202c0 19.159651 15.576358 34.370367 34.443495 34.370367h345.458753a34.443495 34.443495 0 0 0 34.443495-34.370367v-365.642202a34.077853 34.077853 0 0 0-34.22411-34.516624z m0 552.777881H34.370367A34.443495 34.443495 0 0 0 0 643.73211v345.751266c0 19.159651 15.576358 34.443495 34.443495 34.443496h345.458753a34.443495 34.443495 0 0 0 34.443495-34.443496V643.878367a34.22411 34.22411 0 0 0-34.22411-34.443496z m552.704752 0H587.440762a34.443495 34.443495 0 0 0-34.370367 34.370367v345.751267c0 19.159651 15.503229 34.443495 34.370367 34.443495h345.458752a34.443495 34.443495 0 0 0 34.443496-34.443495V643.878367a34.443495 34.443495 0 0 0-34.370367-34.443496z m71.300229-390.505871L805.144129 19.873385a66.693138 66.693138 0 0 0-94.847587 0L511.314055 218.929a66.620009 66.620009 0 0 0 0 94.847587l198.982487 198.909358a66.693138 66.693138 0 0 0 94.847587 0l199.055614-198.909358a67.05878 67.05878 0 0 0 0-94.847587z m-246.442844 231.085871L573.985129 266.389358l183.77177-183.698643 183.698643 183.698643-183.698643 183.698642z"
         ></path>
@@ -10,9 +10,9 @@
     </div>
        <!-- 导航栏：点击跳转到不同的页面 -->
        <ul>
-         <li v-for="p,index of navList" :key='index'>
+         <li v-for="p,index of navList" :key='index' >
             <transition :name='`title-list${index}`'>
-            <a href="#" v-show='showWord'>{{p}}</a>
+            <a href="#" v-show='showWord' :class='classList[index]' @click='changeHighlight(index)'>{{p}}</a>
             </transition>
          </li>                      
       </ul>  
@@ -20,26 +20,60 @@
 </template>
 
 <script>
-import {ref,watch} from 'vue'
+import {ref,reactive} from 'vue'
 export default {
    name:'NavPart',
-   setup(){
+   emits:["getIndex"],
+   setup(props,context){
       // 控制导航栏显示和隐藏
       let showWord=ref(false)
       // 控制导航栏图标动画效果
       let startBeat=ref('')
+      let changeable=true;
       const navList=["首页","笔记","项目","生活","碎碎念","登录","设置","联系我"]
-      // 每次点击重新触发导航图标的动画效果
-      watch(showWord,()=>{
+
+      //控制导航标题上的高亮显示位置
+      const classList=reactive(['active','','','','','','',''])
+      // 存储当前高亮位置
+      let nowIndex=0
+      // 点击后触发的高亮位置显示的修改
+      function changeHighlight(index){
+          if(index!==nowIndex){
+            classList[nowIndex]=''
+            classList[index]='active'
+            nowIndex=index
+            context.emit('getIndex',index)
+          }
+      }
+      
+
+      //开局动画
+      setTimeout(()=>{
+         startBeat.value='jello-horizontal'
+         showWord.value=true
+      },4000)
+      function changeShow(){
+        // 判断能否改变导航标题的显示
+        if(changeable){
+           // 每次点击重新触发导航图标的动画效果 
           startBeat.value=''
           setTimeout(()=>{
-             startBeat.value='jello-horizontal'
+            startBeat.value='jello-horizontal'
           },100)
-      })
+          showWord.value=!showWord.value
+          changeable=false
+          setTimeout(()=>{
+            changeable=true
+          },1000)
+        }
+      }
       return {
          showWord,
          navList,
-         startBeat
+         startBeat,
+         changeShow,
+         classList,
+         changeHighlight
       }
    },
 }

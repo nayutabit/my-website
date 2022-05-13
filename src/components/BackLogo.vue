@@ -61,12 +61,17 @@
         </g>     
     </svg>
   </div>
+  <HomeMsg />
 </template>
 
 <script>
+import HomeMsg from './HomeMsg.vue'
 import {ref} from 'vue'
 export default {
   name: 'BackLogo',
+  components:{
+    HomeMsg
+  },
   setup(){
     //开局的小圆点数量
     let pointSum=ref(4)
@@ -85,7 +90,7 @@ export default {
   align-items: center;
   justify-content: space-evenly;
   margin:0 auto;
-  width: 90vh;
+  width: 70vh;
   height: 70vh;
   overflow: hidden;
   top:15vh;
@@ -102,7 +107,7 @@ export default {
       border-radius: 1vh;
       background-color: @mainColor;
       transform:rotate(45deg);
-      transform-origin:8vh 8vh;
+      transform-origin:6vh 6vh;
     }
     .point1{
       animation:pointAction 1.5s 0s forwards;
@@ -162,12 +167,13 @@ export default {
     animation:waterAction2 0.4s 3.4s forwards;
     }
     .left-water3{
-      transform-origin: right 70%;
+      transform-origin: right 80%;
      visibility: hidden;
       animation:waterAction3 0.4s 3.4s forwards;
     }    
     .right-water1{
       visibility: hidden;
+
       transform-origin:left 30%;
      animation:waterAction4 0.4s 3.4s forwards;
     }
@@ -188,15 +194,15 @@ export default {
 @keyframes waterAction1{
   0%{
     visibility: visible;
-     transform:translate(-5px,-16.61px) scale(0.5,2);
+   transform:translate(-18px,-20.61px) scale(0.2,2);
   }
-  50%{
+  60%{
     visibility: visible;
-    transform:translate(-5px,-16.61px) scale(1,1);
-    opacity:0.8;
+    transform:translate(5px,-16.61px) scale(1.2,0.5);
+    opacity:0.6;
   }
   100%{
-    transform:translate(90px,-20.61px) scale(4,0.2);
+    transform:translate(80px,-16.61px) scale(4,0.1);
     opacity: 0.2;
   }
 }
@@ -236,15 +242,15 @@ export default {
 @keyframes waterAction4{
   0%{
     visibility: visible;
-     transform:translate(20px ,-16.61px) scale(0.1,1.5);
+     transform:translate(20px ,-11.61px) scale(0.1,1.5);
   }
   50%{
     visibility: visible;
-    transform:translate(-8.93px ,-16.61px) scale(1,1);
+     transform:translate(-8.93px ,-11.61px) scale(1,1);
     opacity:0.8;
   }
   100%{
-      transform:translate(-8.93px ,-16.61px) scale(1,1);
+    transform:translate(-115.93px ,-12.61px) scale(3,0.5);   
     opacity: 0.2;
   }
 }
@@ -291,7 +297,7 @@ export default {
   }
   100%{
     visibility: hidden;
-    transform:translate(0,5vh) rotate(765deg) scale(0.5);
+    transform:translate(0,3.5vh) rotate(765deg) scale(0.5);
   }
 }
 
