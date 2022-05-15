@@ -1,15 +1,18 @@
 <template>
   <!-- 左上角nab.图标 -->
    <WebNano/>
-   <!-- 底图和动画效果 -->
-  <BackLogo />
+  <!-- 路由页面显示  -->
+  <!-- <router-view></router-view> -->
+    <router-view v-slot='{Component}'>
+      <keep-alive>
+        <component :is="Component"></component>
+      </keep-alive>
+    </router-view>  
   <!-- 右上角导航栏和动画效果 -->
-  <NavPart @getIndex='routeRedirection'/>
-  <router-view></router-view>
+  <NavPart/>
 </template>
 
 <script>
-import BackLogo from './components/BackLogo.vue'
 import WebNano from './components/WebNano.vue'
 import NavPart from './components/NavPart.vue'
 import {ref} from 'vue'
@@ -18,25 +21,19 @@ export default {
   setup(){
     let index=ref(0)
     return {
-      index
+      index,
     }
   },
   components: {
-    BackLogo,
     WebNano,
     NavPart
   },
-  methods:{
-    routeRedirection(index){
-         console.log('当前需要跳转的路由索引是：',index)
-    }
-  }
 }
 </script>
 
 <style lang='less'>
 *{
-  margin: 0;
+  margin: 0; 
   padding: 0;
   box-sizing: border-box;
 }

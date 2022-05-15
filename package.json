@@ -10,12 +10,16 @@
   "dependencies": {
     "@babel/traverse": "^7.17.9",
     "core-js": "^3.8.3",
+    "har-validator": "^5.1.5",
     "less-loader": "^10.2.0",
+    "request": "^2.88.2",
     "resolve-url": "^0.2.1",
     "source-map-resolve": "^0.5.3",
     "source-map-url": "^0.4.1",
+    "style-resources-loader": "^1.5.0",
     "svg-sprite-loader": "^6.0.11",
     "urix": "^0.1.0",
+    "uuid": "^7.0.3",
     "vue": "^3.2.13",
     "vue-router": "^4.0.15"
   },
@@ -26,7 +30,8 @@
     "@vue/cli-plugin-eslint": "~5.0.0",
     "@vue/cli-service": "~5.0.0",
     "eslint": "^7.32.0",
-    "eslint-plugin-vue": "^8.0.3"
+    "eslint-plugin-vue": "^8.0.3",
+    "style-loader": "^3.3.1"
   },
   "eslintConfig": {
     "root": true,

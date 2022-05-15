@@ -12,40 +12,27 @@
        <ul>
          <li v-for="p,index of navList" :key='index' >
             <transition :name='`title-list${index}`'>
-            <a href="#" v-show='showWord' :class='classList[index]' @click='changeHighlight(index)'>{{p}}</a>
+              <router-link href="#" v-show='showWord' active-class="active" :to='routePath[index]'>{{p}}</router-link>
             </transition>
          </li>                      
       </ul>  
   </div>
+  
 </template>
 
 <script>
-import {ref,reactive} from 'vue'
+import {ref} from 'vue'
 export default {
    name:'NavPart',
    emits:["getIndex"],
-   setup(props,context){
+   setup(){
       // 控制导航栏显示和隐藏
       let showWord=ref(false)
       // 控制导航栏图标动画效果
       let startBeat=ref('')
       let changeable=true;
-      const navList=["首页","笔记","项目","生活","碎碎念","登录","设置","联系我"]
-
-      //控制导航标题上的高亮显示位置
-      const classList=reactive(['active','','','','','','',''])
-      // 存储当前高亮位置
-      let nowIndex=0
-      // 点击后触发的高亮位置显示的修改
-      function changeHighlight(index){
-          if(index!==nowIndex){
-            classList[nowIndex]=''
-            classList[index]='active'
-            nowIndex=index
-            context.emit('getIndex',index)
-          }
-      }
-      
+      const navList=["首页","笔记","项目","生活","留言","登录","设置","联系我"]
+      const routePath=['/home','/note','/note','/note','/note','/note','/note','/note']  
 
       //开局动画
       setTimeout(()=>{
@@ -72,8 +59,7 @@ export default {
          navList,
          startBeat,
          changeShow,
-         classList,
-         changeHighlight
+         routePath
       }
    },
 }
@@ -122,61 +108,18 @@ export default {
 }
 
 // 每个标题的进场和离场动画，从上到下排序
-.title-list0-enter-active{
-  animation: bounce-in-top 1s both;
+.create-title(@n,@i:0) when(@i<=@n){
+  .title-list@{i}-enter-active{
+    animation: bounce-in-top 1s @i*0.05s both;
+  }
+  .title-list@{i}-leave-active{
+    animation: slide-out-blurred-top 0.45s @i*0.05s cubic-bezier(0.755, 0.050, 0.855, 0.060) both;
+  }
+  .create-title(@n,(@i+1))
 }
-.title-list0-leave-active{
-  animation: slide-out-blurred-top 0.45s cubic-bezier(0.755, 0.050, 0.855, 0.060) both;
-}
+.create-title(7);
 
-.title-list1-enter-active{
-  animation: bounce-in-top 1s 0.05s both;
-}
-.title-list1-leave-active{
-  animation: slide-out-blurred-top 0.45s 0.05s cubic-bezier(0.755, 0.050, 0.855, 0.060) both;
-}
 
-.title-list2-enter-active{
-  animation: bounce-in-top 1s 0.1s both;
-}
-.title-list2-leave-active{
-  animation: slide-out-blurred-top 0.45s 0.1s cubic-bezier(0.755, 0.050, 0.855, 0.060) both;
-}
-
-.title-list3-enter-active{
-  animation: bounce-in-top 1s 0.15s both;
-}
-.title-list3-leave-active{
-  animation: slide-out-blurred-top 0.45s 0.15s cubic-bezier(0.755, 0.050, 0.855, 0.060) both;
-}
-
-.title-list4-enter-active{
-  animation: bounce-in-top 1s 0.2s both;
-}
-.title-list4-leave-active{
-  animation: slide-out-blurred-top 0.45s 0.2s cubic-bezier(0.755, 0.050, 0.855, 0.060) both;
-}
-
-.title-list5-enter-active{
-  animation: bounce-in-top 1s 0.25s both;
-}
-.title-list5-leave-active{
-  animation: slide-out-blurred-top 0.45s 0.25s cubic-bezier(0.755, 0.050, 0.855, 0.060) both;
-}
-
-.title-list6-enter-active{
-  animation: bounce-in-top 1s 0.3s both;
-}
-.title-list6-leave-active{
-  animation: slide-out-blurred-top 0.45s 0.3s cubic-bezier(0.755, 0.050, 0.855, 0.060) both;
-}
-
-.title-list7-enter-active{
-  animation: bounce-in-top 1s 0.35s both;
-}
-.title-list7-leave-active{
-  animation: slide-out-blurred-top 0.45s 0.35s cubic-bezier(0.755, 0.050, 0.855, 0.060) both;
-}
 
 // 导航标题进场动画
 @keyframes bounce-in-top {
@@ -258,4 +201,5 @@ export default {
     transform: scale3d(1, 1, 1);
   }
 }
+
 </style>
