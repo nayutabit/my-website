@@ -12,7 +12,13 @@
        <ul>
          <li v-for="p,index of navList" :key='index' >
             <transition :name='`title-list${index}`'>
-              <router-link href="#" v-show='showWord' active-class="active" :to='routePath[index]'>{{p}}</router-link>
+              <router-link href="#" v-show='showWord' :class='classList[index]' :to="{
+                  name:routePath[index],
+                  params:{
+                     allowChange:allowChange
+                  }
+              } "
+              >{{p}}</router-link>
             </transition>
          </li>                      
       </ul>  
@@ -21,7 +27,7 @@
 </template>
 
 <script>
-import {ref} from 'vue'
+import {ref,inject,reactive,watch} from 'vue'
 export default {
    name:'NavPart',
    emits:["getIndex"],
@@ -32,8 +38,14 @@ export default {
       let startBeat=ref('')
       let changeable=true;
       const navList=["首页","笔记","项目","生活","留言","登录","设置","联系我"]
-      const routePath=['/home','/note','/note','/note','/note','/note','/note','/note']  
-
+      const routePath=["homepage","note","project","note","note","note","note","note",]  
+      const classList=reactive(['active','','','','','','',''])
+      const highlight=inject('highlight')
+      watch(highlight,(newVal,oldVal)=>{
+          console.log(oldVal+" to "+newVal)
+          classList[oldVal]=''
+          classList[newVal]='active'
+      })
       //开局动画
       setTimeout(()=>{
          startBeat.value='jello-horizontal'
@@ -54,12 +66,15 @@ export default {
           },1000)
         }
       }
+      const allowChange=inject("allowChange")
       return {
          showWord,
          navList,
          startBeat,
          changeShow,
-         routePath
+         routePath,
+         allowChange,
+         classList
       }
    },
 }

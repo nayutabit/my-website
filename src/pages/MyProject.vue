@@ -1,6 +1,6 @@
 <template>
   <transition name='content' class='my-note' tag='div'>
-    <div>note页</div>  
+    <div>Project页</div>  
   </transition>
   <!-- 左边的门儿 -->
   <transition class='door left-door' tag='div' name='l-door'> 
@@ -15,12 +15,12 @@
 <script >
 import {inject,onActivated} from 'vue'
 export default {
-   name:'MyNote',
+   name:'MyProject',
    setup(){
     const allowChange=inject('allowChange')     
      const highlight=inject('highlight')
      onActivated(()=>{
-       highlight.value=1
+       highlight.value=2
        allowChange.value=false
        setTimeout(()=>{
          allowChange.value=true

@@ -1,4 +1,5 @@
 <template>
+  <transition name='Ngo'>
   <div class="backLogo">
     <!-- 最开始转圈的几个小点 -->
     <div class='foreplay'>
@@ -61,12 +62,13 @@
         </g>     
     </svg>
   </div>
-    <HomeMsg/> 
+  </transition>
+  <HomeMsg/> 
 </template>
 
 <script>
 import HomeMsg from '../components/HomeMsg.vue'
-import {ref} from 'vue'
+import {ref,inject,onActivated} from 'vue'
 export default {
   name: 'HomePage',
   components:{
@@ -75,15 +77,29 @@ export default {
   setup(){
     //开局的小圆点数量
     let pointSum=ref(4)
+    const allowChange=inject('allowChange')
+    const highlight=inject('highlight')
+    onActivated(()=>{
+      highlight.value=0
+      allowChange.value=false
+      setTimeout(()=>{
+        allowChange.value=true
+     },4500)
+    })
     return {
       pointSum,
+      allowChange,
     }
   },
+  activated(){
+    
+  },
+  
 }
 </script>
 
 <style scoped lang='less'>
-@mainColor:#f87b7b;
+@mainColor1:#f87b7b;
 .backLogo{
   position: absolute;
   left:50%;
@@ -107,7 +123,7 @@ export default {
       width: 2vh;
       height: 2vh;
       border-radius: 1vh;
-      background-color: @mainColor;
+      background-color: @mainColor1;
       transform:rotate(45deg);
       transform-origin:6vh 6vh;
     }
@@ -136,13 +152,13 @@ export default {
         height: 1vh;
         border-radius: 0.5vh;
         visibility: hidden;
-        background-color: @mainColor;
+        background-color: @mainColor1;
         animation:bridgeAction 1.5s 1.5s forwards
     }
   }
   #LOGON {
     position: absolute;
-    fill: @mainColor;
+    fill: @mainColor1;
   // transform: skew(-29deg);
     visibility: hidden;
     animation:action3 0.4s 3s forwards;
@@ -157,7 +173,7 @@ export default {
     }  
   }  
   .water{
-    fill:@mainColor;     
+    fill:@mainColor1;     
     .left-water1{
       transform-origin: right 115%;
      visibility: hidden;
@@ -373,5 +389,19 @@ export default {
   }
 }
 
+.Ngo-leave-active {
+	animation: slide-out-bck-center 0.5s cubic-bezier(0.550, 0.085, 0.680, 0.530) both;
+}
+
+@keyframes slide-out-bck-center {
+  0% {
+    transform: translateX(-50%) scale(1);
+    opacity: 1;
+  }
+  100% {
+    transform:translateX(-50%) scale(0);
+    opacity: 0;
+  }
+}
 </style>
 

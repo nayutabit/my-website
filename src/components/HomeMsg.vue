@@ -14,13 +14,13 @@
       <p class='text w1'>Onward</p>    
     </transition>
     <transition name='slide-in-bottom2' appear="">
-      <p  class='text'>Indefatigable</p>    
+      <p  class='text w12'>Indefatigable</p>    
     </transition>
     <transition name='slide-in-bottom3' appear="">
       <p  class='text w2'>and shared</p>    
     </transition>
     <transition name='slide-in-bottom4' appear="">
-      <p class='text bottom-msg w3'>——welcome to nayutabit</p>    
+      <p class='text bottom-msg w3' >——welcome to nayutabit</p>    
     </transition>
 </template>
 
@@ -33,10 +33,9 @@ export default {
 <style scoped lang='less'>
 
 .text{
-  position: relative;
+  position: absolute;
   width: 100%;
   top:50%;
-  transform: translateY(-180px);
   text-align: center;
   font: 300 80px/1.2 "sofia-pro", sans-serif;
   color:#fff;
@@ -47,10 +46,9 @@ export default {
   }
 }
 .top-msg{
-  position: relative;
+  position: absolute;
   top:50%;
-  transform: translateY(-180px);
-  margin:0 auto;
+  left:50%;
   width: 200px;
   color: #263366;
   font: 700 20px/1 "sofia-pro", sans-serif;
@@ -62,16 +60,22 @@ export default {
   }
 }   
 .w0{
-  left:-139px;
+  transform: translate(-242px,-154px);
 } 
 .w1{
   left:-95px;
+  transform: translateY(-125px);
+}
+.w12{
+  transform: translateY(-39px);
 }
 .w2{
   left:-38px;
+  transform: translateY(43px);
 }
 .w3{
   left:100px;
+  transform: translateY(141px);
 }
 .rotate-center {
 	animation: rotate-center infinite 3s linear;
@@ -92,8 +96,9 @@ export default {
     animation: slide-in-bottom 0.6s 3.4+@i*0.1s both;
   }
   .slide-in-bottom@{i}-leave-active{
-    animation: slide-out-top 0.6s @i*0.1s both;
+    animation: slide-out-top 0.4s @i*0.05s both;
   }
+  
   .create-text(@n,(@i+1))
 }
 .create-text(4);
@@ -101,7 +106,7 @@ export default {
 
 @keyframes slide-in-bottom {
   0% {
-    top:100%;
+    top:70%;
     opacity:0;
   }
   70%{
@@ -118,16 +123,8 @@ export default {
     top:50% ;
     opacity: 1;
   }
-  30%{
-    top:52% ;  
-    opacity: 1;
-  }
-  50%{
-    top:30% ; 
-    opacity: 0.2;
-  }
   100% {
-     top:0 ;
+     top:30% ;
     opacity: 0;
   }
 }
