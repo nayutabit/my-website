@@ -1,6 +1,6 @@
 <template>
   <transition name='content' class='my-note' tag='div'>
-    <div>note页</div>  
+    <div>Msg页</div>  
   </transition>
   <!-- 左边的门儿 -->
   <transition class='door left-door' tag='div' name='l-door'> 
@@ -15,12 +15,12 @@
 <script >
 import {inject,onActivated} from 'vue'
 export default {
-   name:'MyNote',
+   name:'MyMsg',
    setup(){
     const allowChange=inject('allowChange')     
      const highlight=inject('highlight')
      onActivated(()=>{
-       highlight.value=1
+       highlight.value=4
        allowChange.value=false
        setTimeout(()=>{
          allowChange.value=true
@@ -83,21 +83,21 @@ export default {
 @keyframes leftGo{
   0%{
     visibility:visible;
-    width:50%;
+    transform: translateX(0);
   }
   100%{
     visibility:visible;
-    width:20%;
+    transform: translateX(-30vw);
   }
 }
 @keyframes leftCome{
   0%{
     visibility:visible;
-    width:20%;
+    transform: translateX(-30vw);
   }
   100%{
     visibility:visible;
-    width:50%;
+    transform: translateX(0);
   }
 }
 // 右门样式和动画
@@ -111,21 +111,21 @@ export default {
 @keyframes rightGo{
   0%{
     visibility:visible;
-    width:50%;
+    transform: translateX(0);
   }
   100%{
     visibility:visible;
-    width:20%;
+    transform: translateX(30vw);
   }
 }
 @keyframes rightCome{
   0%{
     visibility:visible;
-    width:20%;
+    transform: translateX(30vw);
   }
   100%{
     visibility:visible;
-    width:50%;
+    transform: translateX(0);
   }
 }
 </style>

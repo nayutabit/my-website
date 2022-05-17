@@ -75,7 +75,7 @@ export default {
 // 左门样式和动画
 .left-door{
   left:0;
-  animation: leftGo 1s 0.6s forwards;
+  animation: leftGo 0.6s 0.6s forwards;
 }
 .l-door-leave-active{
   animation: leftCome 0.6s;
@@ -103,7 +103,7 @@ export default {
 // 右门样式和动画
 .right-door{
   right:0;
-  animation: rightGo 1s 0.6s forwards;
+  animation: rightGo 0.6s 0.6s forwards;
 }
 .r-door-leave-active{
   animation: rightCome 0.6s;

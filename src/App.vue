@@ -29,6 +29,13 @@ export default {
     WebNano,
     NavPart
   },
+  created() {
+    console.log(this.$router);
+    if(this.$router.currentRoute.path!=='/home'){
+      this.$router.replace('/home')
+    }
+  },
+
 }
 </script>
 
@@ -53,6 +60,8 @@ a{
   height: 100vh;
 }
 body {
+  width: 100vw;
+  height: 100vh;
   position: relative;
   background-color: @mainColor2;
   overflow: hidden;

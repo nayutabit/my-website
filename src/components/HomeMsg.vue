@@ -20,7 +20,7 @@
       <p  class='text w2'>and shared</p>    
     </transition>
     <transition name='slide-in-bottom4' appear="">
-      <p class='text bottom-msg w3' >——welcome to nayutabit</p>    
+      <p class='text bottom-msg w3' >welcome to nayutabit</p>    
     </transition>
 </template>
 
@@ -34,14 +34,14 @@ export default {
 
 .text{
   position: absolute;
-  width: 100%;
+  left:0;
+  right:0;
   top:50%;
   text-align: center;
   font: 300 80px/1.2 "sofia-pro", sans-serif;
   color:#fff;
   letter-spacing: 0.02em;
   &.bottom-msg{
-      margin-top:10px;
       font: 300 22px/1.4 "sofia-pro", sans-serif;
   }
 }
@@ -63,19 +63,18 @@ export default {
   transform: translate(-242px,-154px);
 } 
 .w1{
-  left:-95px;
-  transform: translateY(-125px);
+  transform: translate(-97px,-125px);
 }
 .w12{
-  transform: translateY(-39px);
+  transform: translate(0px,-39px);
 }
 .w2{
-  left:-38px;
-  transform: translateY(43px);
+  transform: translate(-35px,43px);
 }
 .w3{
-  left:100px;
-  transform: translateY(141px);
+  transform: translate(-125px,148px);
+  left:20vw;
+  right:20vw;
 }
 .rotate-center {
 	animation: rotate-center infinite 3s linear;
@@ -127,6 +126,55 @@ export default {
      top:30% ;
     opacity: 0;
   }
+}
+
+
+// 响应式布局，对于宽度768px以下文字居中，字号减小
+@media (max-width:768px){
+.text{
+  font: 300 50px/1 "sofia-pro", sans-serif;
+}  
+.w0{
+  transform: translate(-50px,-148px);
+} 
+.w1{
+  transform: translateY(-112px);
+}
+.w12{
+  transform: translateY(-52px);
+}
+.w2{
+  transform: translateY(10px);
+}
+.w3{
+  transform: translateY(86px);
+  left:20vw;
+  right:20vw;
+}  
+}
+
+// 响应式布局，对于宽度375px以下文字字号进一步减小
+@media (max-width:375px){
+.text{
+  font: 300 40px/1 "sofia-pro", sans-serif;
+}  
+.w0{
+  transform: translate(-50px,-117px);
+} 
+.w1{
+  transform: translateY(-78px);
+}
+.w12{
+  transform: translateY(-30px);
+}
+.w2{
+  transform: translateY(23px);
+}
+.w3{
+  transform: translateY(86px);
+  left:20vw;
+  right:20vw;
+} 
 }
 
 </style>

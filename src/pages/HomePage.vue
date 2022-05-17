@@ -103,15 +103,14 @@ export default {
 .backLogo{
   position: absolute;
   left:50%;
-  transform: translateX(-50%);
+  transform: translate(-50%,-50%);
   display: flex;
   align-items: center;
   justify-content: space-evenly;
   margin:0 auto;
   width: 70vh;
-  height: 70vh;
   overflow: hidden;
-  top:15vh;
+  top:50%;
   .foreplay{
     position:absolute;
     width: 16vh;
@@ -146,7 +145,8 @@ export default {
     align-items: center;
     justify-content: space-evenly;
     width: 100%;
-    height: 100%;
+    height: 91%;
+    overflow: hidden;
     .line{
         width: 1vh;
         height: 1vh;
@@ -160,7 +160,7 @@ export default {
     position: absolute;
     fill: @mainColor1;
   // transform: skew(-29deg);
-    visibility: hidden;
+    visibility: hidden; 
     animation:action3 0.4s 3s forwards;
     .N-left{
       transform:translate(-10.93px,-16.67px) skew(32deg);
@@ -173,7 +173,8 @@ export default {
     }  
   }  
   .water{
-    fill:@mainColor1;     
+    fill:@mainColor1;  
+    overflow: hidden; 
     .left-water1{
       transform-origin: right 115%;
      visibility: hidden;
@@ -341,15 +342,15 @@ export default {
      height:140vh;
      width:1vh;
   }
-  95%{
+  85%{
      transform: scale(0.5,0.5);
      height:200vh;
-     width:55vh;
+     width:40vh;
   }
    100%{
      transform: scale(0.5,0.5);
      height:200vh;
-     width:50vh;
+     width:40vh;
   }
 }
 
@@ -395,13 +396,88 @@ export default {
 
 @keyframes slide-out-bck-center {
   0% {
-    transform: translateX(-50%) scale(1);
+    transform: translate(-50%,-50%) scale(1);
     opacity: 1;
   }
   100% {
-    transform:translateX(-50%) scale(0);
+    transform:translate(-50%,-50%) scale(0);
     opacity: 0;
   }
+}
+
+@media (max-width:768px){
+.backLogo{
+  width: 60vw;
+}
+@keyframes bridgeAction{
+  0%{
+      visibility: visible;
+      transform: scale(1,1);
+  }
+  30%{
+     visibility: visible;
+     transform: scale(3,3);
+  }
+  50%{
+     visibility: visible;
+     transform: scale(0.5,0.5);
+     width: 1vh;
+     height: 1vh;
+  }
+  70%{
+     visibility: visible;
+     transform: scale(0.5,0.5);
+     height:140vh;
+     width:1vh;
+  }
+  85%{
+     transform: scale(0.5,0.5);
+     height:200vh;
+     width:34vw;
+  }
+   100%{
+     transform: scale(0.5,0.5);
+     height:200vh;
+     width:34vw;
+  }
+}
+}
+@media (max-width:500px){
+.backLogo{
+  width: 275px;
+}
+@keyframes bridgeAction{
+  0%{
+      visibility: visible;
+      transform: scale(1,1);
+  }
+  30%{
+     visibility: visible;
+     transform: scale(3,3);
+  }
+  50%{
+     visibility: visible;
+     transform: scale(0.5,0.5);
+     width: 10px;
+     height: 1vh;
+  }
+  70%{
+     visibility: visible;
+     transform: scale(0.5,0.5);
+     height:140vh;
+     width:10px;
+  }
+  85%{
+     transform: scale(0.5,0.5);
+     height:200vh;
+     width:157px;
+  }
+   100%{
+     transform: scale(0.5,0.5);
+     height:200vh;
+     width:157px;
+  }
+}
 }
 </style>
 

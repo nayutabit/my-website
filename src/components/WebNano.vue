@@ -35,4 +35,10 @@ export default {
   height:40px;
   fill:#fff;
 }
+@media (max-width:768px){
+.nano{
+  left:25px;
+  top:15px;
+}  
+}
 </style>

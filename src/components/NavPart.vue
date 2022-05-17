@@ -38,11 +38,10 @@ export default {
       let startBeat=ref('')
       let changeable=true;
       const navList=["首页","笔记","项目","生活","留言","登录","设置","联系我"]
-      const routePath=["homepage","note","project","note","note","note","note","note",]  
+      const routePath=["homepage","note","project","life","msg","login","settings","contact",]  
       const classList=reactive(['active','','','','','','',''])
       const highlight=inject('highlight')
       watch(highlight,(newVal,oldVal)=>{
-          console.log(oldVal+" to "+newVal)
           classList[oldVal]=''
           classList[newVal]='active'
       })
@@ -217,4 +216,10 @@ export default {
   }
 }
 
+@media (max-width:768px){
+.nav{
+  right:25px;
+  top:25px; 
+}
+}
 </style>

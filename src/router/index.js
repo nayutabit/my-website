@@ -6,6 +6,11 @@ import { createRouter, createWebHashHistory } from "vue-router";
 import MyNotes from "../pages/MyNotes.vue";
 import HomePage from "../pages/HomePage.vue";
 import MyProject from "../pages/MyProject.vue";
+import MyLife from "../pages/MyLife.vue";
+import MyMsg from "../pages/MyMsg.vue";
+import AdLogin from "../pages/AdLogin.vue";
+import WebSettings from "../pages/WebSettings.vue";
+import ContactMe from "../pages/ContactMe.vue";
 const router = new createRouter({
   history: createWebHashHistory(),
   routes: [
@@ -27,6 +32,31 @@ const router = new createRouter({
       path: "/project",
       name: "project",
       component: MyProject
+    },
+    {
+      path: "/life",
+      name: "life",
+      component: MyLife
+    },
+    {
+      path: "/msg",
+      name: "msg",
+      component: MyMsg
+    },
+    {
+      path: "/login",
+      name: "login",
+      component: AdLogin
+    },
+    {
+      path: "/settings",
+      name: "settings",
+      component: WebSettings
+    },
+    {
+      path: "/contact",
+      name: "contact",
+      component: ContactMe
     }
   ]
 });
