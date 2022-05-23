@@ -128,4 +128,97 @@ export default {
     transform: translateX(0);
   }
 }
+@media (max-width:1200px){
+.my-note{
+  left:12%;
+  right:12%;    
+}
+@keyframes leftGo{
+  0%{
+    visibility:visible;
+    width:50%;
+  }
+  100%{
+    visibility:visible;
+    width:12%;
+  }
+}
+@keyframes leftCome{
+  0%{
+    visibility:visible;
+    width:12%;
+  }
+  100%{
+    visibility:visible;
+    width:50%;
+  }
+}
+@keyframes rightGo{
+  0%{
+    visibility:visible;
+    width:50%;
+  }
+  100%{
+    visibility:visible;
+    width:12%;
+  }
+}
+@keyframes rightCome{
+  0%{
+    visibility:visible;
+    width:12%;
+  }
+  100%{
+    visibility:visible;
+    width:50%;
+  }
+}
+}
+
+@media (max-width:992px){
+.my-note{
+  left:0%;
+  right:0%;    
+}
+@keyframes leftGo{
+  0%{
+    visibility:visible;
+    width:50%;
+  }
+  100%{
+    visibility:visible;
+    width:0%;
+  }
+}
+@keyframes leftCome{
+  0%{
+    visibility:visible;
+    width:0%;
+  }
+  100%{
+    visibility:visible;
+    width:50%;
+  }
+}
+@keyframes rightGo{
+  0%{
+    visibility:visible;
+    width:50%;
+  }
+  100%{
+    visibility:visible;
+    width:0%;
+  }
+}
+@keyframes rightCome{
+  0%{
+    visibility:visible;
+    width:0%;
+  }
+  100%{
+    visibility:visible;
+    width:50%;
+  }
+}
+}
 </style>

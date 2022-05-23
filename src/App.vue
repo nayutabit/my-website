@@ -22,15 +22,16 @@ export default {
   setup(){
     let allowChange=ref(false)
     let highlight=ref(0)
+    let isAdmin=ref(false)
     provide("allowChange",allowChange)
     provide("highlight",highlight)
+    provide("isAdmin",isAdmin)
   },
   components: {
     WebNano,
     NavPart
   },
   created() {
-    console.log(this.$router);
     if(this.$router.currentRoute.path!=='/home'){
       this.$router.replace('/home')
     }

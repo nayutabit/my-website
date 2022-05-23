@@ -9,6 +9,7 @@
   },
   "dependencies": {
     "@babel/traverse": "^7.17.9",
+    "axios": "^0.27.2",
     "core-js": "^3.8.3",
     "har-validator": "^5.1.5",
     "less-loader": "^10.2.0",
