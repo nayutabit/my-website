@@ -65,6 +65,6 @@ body {
   height: 100vh;
   position: relative;
   background-color: @mainColor2;
-  overflow: hidden;
+  overflow-x: hidden;
 }
 </style>

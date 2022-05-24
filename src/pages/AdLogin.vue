@@ -1,30 +1,10 @@
 <template>
   <transition name='content' class='my-note' tag='div'>
     <div>
-      <div class='login' v-if='!isAdmin'>
-          <svg t="1653298600900" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="12416" width="200" height="200">
-            <path
-              d="M 618.21 208.66 s -79.41 31.16 -131.89 112.78 c 0.65 -1.41 42.81 -91.63 131.89 -112.78 Z M 675.23 544.93 c 0 -3.8 3.26 -6.87 7.28 -6.87 c 4.02 0 7.28 3.07 7.28 6.87 c 0 3.79 -3.26 6.87 -7.28 6.87 c -4.02 0 -7.28 -3.07 -7.28 -6.87 Z"
-              
-              p-id="12417"
-            ></path>
-            <path d="M 668.1 543.59 c 0.4 0.99 9.73 23.53 39.56 20.58 c -0.01 0 -28.57 15.65 -39.56 -20.58 Z"  p-id="12418"></path>
-            <path
-              d="M 512 73 C 269.55 73 73 269.55 73 512 c 0 40.74 5.55 80.19 15.93 117.62 c 14.53 -108.79 77.34 -242.05 266.72 -348.76 c 0 0 53.03 -31.05 129.97 -43.14 l -27.75 47.53 c 0.63 -0.71 81.49 -91.83 190.7 -105.51 c 0 0 14.56 52.48 -25.83 144.53 c 0.48 -0.59 31.47 -38.33 50.28 -90.67 c 0 0 54.13 -35.18 136.57 -16.21 c 0 0 -10.72 59.35 -70.35 106.89 l -42.04 -25.55 c 0.67 0.65 86.63 83.79 105.52 147.28 c 0 0 25.83 62.38 -14.84 92.05 l -4.12 -35.17 s -11.81 -39.02 -40.39 -12.09 l -25.83 47.26 s -43.14 -25.83 -62.1 0 c 0 0 -1.65 18.69 21.43 32.98 c 0 0 -50.01 40.12 -117.61 56.33 c 0 0 -114.86 34.9 -192.08 -23.08 l -33.8 -39.02 s -70.35 -63.48 -120.36 31.05 c 0 0 -80.59 208.3 141.18 325.47 a 435.044 435.044 0 0 0 77.2 21.83 c 26.13 4.85 53.06 7.38 80.59 7.38 c 25.37 0 50.23 -2.15 74.42 -6.28 C 793.43 909.37 951 729.09 951 512 c 0 -242.45 -196.55 -439 -439 -439 Z m 148.38 463.82 c 4.25 -8.4 20.9 -8.52 37.18 -0.27 c 16.28 8.24 26.03 21.73 21.78 30.13 c -4.25 8.4 -20.9 8.51 -37.17 0.27 c -16.29 -8.24 -26.04 -21.73 -21.79 -30.13 Z M 527.59 671.55 c 0.94 -0.36 1.88 -0.72 2.81 -1.07 c 0.66 -0.25 1.32 -0.49 1.98 -0.73 c 0.35 -0.13 0.7 -0.26 1.06 -0.38 c 2.42 -0.88 4.83 -1.7 7.22 -2.48 c 1.42 -0.47 2.84 -0.91 4.25 -1.34 c 0.48 -0.15 0.97 -0.3 1.45 -0.44 c 0.9 -0.27 1.8 -0.53 2.7 -0.79 c 0.61 -0.18 1.23 -0.35 1.84 -0.52 c 1.29 -0.36 2.57 -0.7 3.85 -1.04 c 1.4 -0.36 2.79 -0.71 4.17 -1.05 c 0.91 -0.22 1.81 -0.43 2.71 -0.64 c 0.01 0 0.02 -0.01 0.03 -0.01 c 1.81 -0.41 3.61 -0.8 5.4 -1.17 c 2.7 -0.55 5.38 -1.04 8.02 -1.48 c 0.79 -0.13 1.58 -0.26 2.37 -0.38 l 0.55 -0.09 c 0.65 -0.1 1.29 -0.2 1.93 -0.29 c 0.69 -0.1 1.38 -0.2 2.07 -0.29 c 0.56 -0.08 1.12 -0.15 1.68 -0.22 c 2.83 -0.36 5.63 -0.66 8.38 -0.9 c 0.62 -0.06 1.24 -0.11 1.86 -0.16 c 64.8 -5.16 107.07 20.65 107.67 21.01 c -34.96 -14.13 -69.13 -18.07 -97.91 -17.59 l -1.54 0.03 c -0.47 0.01 -0.93 0.02 -1.4 0.04 l -1.92 0.06 c -0.45 0.02 -0.9 0.03 -1.35 0.05 c -0.69 0.02 -1.37 0.06 -2.05 0.09 c -2.14 0.1 -4.25 0.22 -6.32 0.36 l -0.81 0.06 c -1.33 0.09 -2.65 0.2 -3.95 0.31 c -0.32 0.03 -0.65 0.05 -0.97 0.09 l -2.88 0.27 c -0.63 0.06 -1.26 0.13 -1.89 0.2 c -0.31 0.03 -0.62 0.07 -0.93 0.1 l -1.62 0.18 l -0.23 0.03 c -0.53 0.06 -1.06 0.13 -1.58 0.19 l -0.24 0.03 c -0.6 0.07 -1.2 0.15 -1.79 0.23 c -1.19 0.15 -2.36 0.32 -3.51 0.48 c -0.58 0.08 -1.15 0.17 -1.71 0.25 c -0.28 0.04 -0.57 0.08 -0.85 0.13 c -0.28 0.04 -0.56 0.09 -0.84 0.13 c -0.28 0.04 -0.55 0.09 -0.83 0.13 c -0.28 0.04 -0.55 0.09 -0.82 0.13 c -1.37 0.22 -2.7 0.45 -4.01 0.68 c -0.26 0.05 -0.52 0.09 -0.78 0.14 c -0.41 0.07 -0.81 0.15 -1.21 0.22 c -0.13 0.02 -0.27 0.05 -0.4 0.07 c -0.48 0.09 -0.96 0.18 -1.43 0.27 c -0.25 0.05 -0.5 0.09 -0.74 0.14 c -0.24 0.05 -0.49 0.09 -0.73 0.14 c -0.49 0.09 -0.97 0.19 -1.44 0.29 c -0.24 0.05 -0.47 0.09 -0.71 0.14 c -0.47 0.09 -0.93 0.19 -1.39 0.29 c -0.23 0.05 -0.46 0.09 -0.68 0.14 c -2.04 0.43 -3.97 0.87 -5.77 1.3 c -0.2 0.05 -0.4 0.09 -0.6 0.14 c -0.79 0.19 -1.56 0.38 -2.3 0.56 c -0.19 0.05 -0.37 0.09 -0.55 0.14 c -0.43 0.11 -0.85 0.22 -1.27 0.32 c -0.17 0.05 -0.35 0.09 -0.52 0.13 c -0.69 0.18 -1.35 0.36 -1.98 0.53 c -0.27 0.07 -0.53 0.14 -0.79 0.21 c -0.51 0.14 -1 0.28 -1.47 0.41 c -0.25 0.07 -0.49 0.14 -0.73 0.21 c -0.9 0.26 -1.73 0.51 -2.49 0.73 c -0.18 0.06 -0.35 0.11 -0.51 0.16 c -0.02 0.01 -0.05 0.02 -0.07 0.02 c -0.11 0.03 -0.22 0.07 -0.32 0.1 c -0.11 0.03 -0.21 0.06 -0.32 0.1 c -0.1 0.03 -0.21 0.06 -0.3 0.09 c -2.19 0.69 -3.56 1.17 -3.99 1.33 l 1.38 -0.54 c 0.03 0.03 0.05 0.02 0.06 0.02 Z m 164.95 13.8 c -103.6 -19.24 -178.61 19.24 -178.61 19.24 c 71.99 -46.72 178.61 -19.24 178.61 -19.24 Z m 0 8.79 c -117.6 0.77 -154.09 35.25 -158.82 40.32 c 47.04 -52.86 158.82 -40.32 158.82 -40.32 Z m 117.61 -29.13 s -1.92 15.94 -22.26 34.35 c 0 0 -23.08 22.26 -47.54 33.52 c 0 0 -17.31 36.27 -53.86 38.47 c 0 0 -70.9 -16.49 -108.54 0 c 0 0 -15.66 6.32 -25.56 25.56 c 0 0 -0.82 -33.8 44.79 -41.77 l 49.74 1.1 s 51.66 14.29 61.83 -16.21 c 0 0 -70.07 5.22 -80.24 -16.21 c 0 0 83.54 24.46 125.03 -10.17 c 0 0 19.24 -14.29 4.95 -29.4 l -4.95 -16.76 s 25 36 41.49 0 c 0 0 21.71 -73.09 -7.14 -129.42 c 0.42 0.6 30.17 44.26 22.26 126.94 Z"
-              
-              p-id="12419"
-            ></path>
-          </svg>
-          <span class='t1'>管理员登录</span>
-          <span class='line'></span>
-          <span class='t2'>Administrator Login</span>
-          <input type="text" name='username' v-model='username' placeholder="请输入管理员账号">
-          <input type="password" name='password' v-model='password' placeholder="请输入密码">
-          <button class='btn' @click='login'>登录</button>
-      </div>
-      <div class='personal' v-else>
-         <button @click='logout'>退出登录</button>
-      </div>
+      <!-- 登录部分的页面 -->
+      <AdminLogin />
+      <!-- 登录后管理员个人页面 -->
+      <WebInfo />
     </div>  
   </transition>
   <!-- 左边的门儿 -->
@@ -36,12 +16,16 @@
     <div></div>
   </transition> 
 </template>
-
 <script >
-import axios from 'axios'
-import {inject,onActivated,ref,onMounted} from 'vue'
+import WebInfo from '../components/login/WebInfo.vue'
+import AdminLogin from '../components/login/AdminLogin.vue'
+import {inject,onActivated} from 'vue'
 export default {
    name:'AdLogin',
+   components:{
+      WebInfo,
+      AdminLogin
+   },
    setup(){
     const allowChange=inject('allowChange')     
     const highlight=inject('highlight')
@@ -53,118 +37,17 @@ export default {
          allowChange.value=true
        },1000) 
      })
-    //  如果本地的token还有效则不需要再次登录
-     onMounted(()=>{
-       axios.get('http://127.0.0.1:3007/my/userinfo',{
-         headers:{
-           authorization:localStorage.getItem('token')
-         }
-       }).then(res=>{
-         if(res.data.status===0){
-           isAdmin.value=true
-         }
-        }).catch(err=>{
-          console.log(err)
-        })
-     })
-    let username=ref('')
-    let password=ref('')
-
-    // 点击登陆
-    function login(){
-      if(username.value===''||password.value===''){
-        alert('账号或者密码不能为空')
-      }else{
-        //服务器地址暂定本机，上线后改云服务器
-        axios.post('http://127.0.0.1:3007/api/login',{
-          username:username.value,
-          password:password.value
-        }).then(res=>{
-          if(res.data.status===0){
-            alert('登录成功')
-            localStorage.setItem('token',res.data.token)
-            isAdmin.value=true
-          }else{
-            alert('账号或密码错误')
-          }
-        }).catch(err=>{
-          alert('发生错误')
-          console.log(err)
-        })
-      }
-    }
-    // 点击退出登录
-    function logout(){
-      localStorage.removeItem('token')
-      isAdmin.value=false
-      password.value=''
-    }
     return{
-      username,
-      password,
-      login,
-      logout,
       isAdmin
     }
-   },
+   }
 }
 </script>
 
 <style lang='less' scoped>
 @mainColor1:#f87b7b;
 @mainColor2:#F76C6C;
-.login{
-    display: flex;
-    flex-direction:column;
-    align-items: center;
-    width: 500px;
-    height: 600px;
-    margin:0 auto;
-    color:#fff;
-    .icon{
-      width: 150px;
-      height: 150px;
-      background: #fff;
-      fill:#cf6363;
-      border-radius: 50%;
-    }
-    .t1{
-      margin-top:50px;
-      font:400 50px/1 "sofia-pro", sans-serif;
-    }
-    .line{
-      margin-top:15px;
-      width: 220px;
-      height: 1px;
-      background-color: #fff;
-    }
-    .t2{
-      margin-top:5px;
-      margin-bottom:40px;
-    }
-    input{
-      width: 400px;
-      height: 50px;
-      outline: none;
-      margin-top:10px;
-      border:none;
-      text-align: center;
-      font-size:20px;
-      &::placeholder{
-        color:rgb(216, 216, 216);
-      }
-    }
-    .btn{
-      width: 150px;
-      height: 50px;
-      background-color: rgba(0,0,0,0.4);
-      margin-top:50px;
-      font:400 20px/1 "sofia-pro", sans-serif;
-      color:#fff;
-      border:none;
-      cursor: pointer;
-    }
-}
+
 
 
 // 进场和离场动画
@@ -176,8 +59,7 @@ export default {
   height: 100%;
   left:20%;
   right:20%;    
-  background-color: @mainColor1;
-  overflow: hidden;
+
   visibility:hidden;
   animation:delayIn 0.6s 0.6s forwards; 
 }
@@ -219,21 +101,21 @@ export default {
 @keyframes leftGo{
   0%{
     visibility:visible;
-    transform: translateX(0);
+    width:50%;
   }
   100%{
     visibility:visible;
-    transform: translateX(-30vw);
+    width:20%;
   }
 }
 @keyframes leftCome{
   0%{
     visibility:visible;
-    transform: translateX(-30vw);
+    width:20%;
   }
   100%{
     visibility:visible;
-    transform: translateX(0);
+    width:50%;
   }
 }
 // 右门样式和动画
@@ -247,24 +129,26 @@ export default {
 @keyframes rightGo{
   0%{
     visibility:visible;
-    transform: translateX(0);
+    width:50%;
   }
   100%{
     visibility:visible;
-    transform: translateX(30vw);
+    width:20%;
   }
 }
 @keyframes rightCome{
   0%{
     visibility:visible;
-    transform: translateX(30vw);
+    width:20%;
   }
   100%{
     visibility:visible;
-    transform: translateX(0);
+    width:50%;
   }
 }
-@media (max-width:1200px){
+
+//小屏幕留白减少
+@media (max-width:1920px){
 .my-note{
   left:12%;
   right:12%;    
@@ -311,6 +195,7 @@ export default {
 }
 }
 
+// 平板和手机上两边不留白
 @media (max-width:992px){
 .my-note{
   left:0%;
@@ -357,4 +242,5 @@ export default {
   }
 }
 }
+
 </style>

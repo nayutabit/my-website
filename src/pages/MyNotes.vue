@@ -33,15 +33,18 @@ export default {
 <style lang='less' scoped>
 @mainColor1:#f87b7b;
 @mainColor2:#F76C6C;
-// 内容部分
+
+// 进场和离场动画
 .my-note{
+  display: flex;
+  align-items: center;
   position: absolute;
   top:0;
   height: 100%;
   left:20%;
   right:20%;    
   background-color: @mainColor1;
-  overflow: hidden;
+  // overflow: hidden;
   visibility:hidden;
   animation:delayIn 0.6s 0.6s forwards; 
 }
@@ -129,7 +132,8 @@ export default {
   }
 }
 
-@media (max-width:1200px){
+//小屏幕留白减少
+@media (max-width:1920px){
 .my-note{
   left:12%;
   right:12%;    
@@ -176,6 +180,7 @@ export default {
 }
 }
 
+// 平板和手机上两边不留白
 @media (max-width:992px){
 .my-note{
   left:0%;
@@ -222,4 +227,5 @@ export default {
   }
 }
 }
+
 </style>

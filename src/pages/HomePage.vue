@@ -67,8 +67,9 @@
 </template>
 
 <script>
+import axios from 'axios'
 import HomeMsg from '../components/HomeMsg.vue'
-import {ref,inject,onActivated} from 'vue'
+import {ref,inject,onActivated,onMounted} from 'vue'
 export default {
   name: 'HomePage',
   components:{
@@ -79,6 +80,7 @@ export default {
     let pointSum=ref(4)
     const allowChange=inject('allowChange')
     const highlight=inject('highlight')
+    const isAdmin=inject('isAdmin')
     onActivated(()=>{
       highlight.value=0
       allowChange.value=false
@@ -86,6 +88,20 @@ export default {
         allowChange.value=true
      },4500)
     })
+    //  如果本地的token还有效则不需要再次登录
+     onMounted(()=>{
+       axios.get('http://127.0.0.1:3007/my/userinfo',{
+         headers:{
+           authorization:localStorage.getItem('token')
+         }
+       }).then(res=>{
+         if(res.data.status===0){
+           isAdmin.value=res.data.data.username
+         }
+        }).catch(err=>{
+          console.log(err)
+        })
+     })    
     return {
       pointSum,
       allowChange,

@@ -83,21 +83,21 @@ export default {
 @keyframes leftGo{
   0%{
     visibility:visible;
-    transform: translateX(0);
+    width:50%;
   }
   100%{
     visibility:visible;
-    transform: translateX(-30vw);
+    width:20%;
   }
 }
 @keyframes leftCome{
   0%{
     visibility:visible;
-    transform: translateX(-30vw);
+    width:20%;
   }
   100%{
     visibility:visible;
-    transform: translateX(0);
+    width:50%;
   }
 }
 // 右门样式和动画
@@ -111,21 +111,21 @@ export default {
 @keyframes rightGo{
   0%{
     visibility:visible;
-    transform: translateX(0);
+    width:50%;
   }
   100%{
     visibility:visible;
-    transform: translateX(30vw);
+    width:20%;
   }
 }
 @keyframes rightCome{
   0%{
     visibility:visible;
-    transform: translateX(30vw);
+    width:20%;
   }
   100%{
     visibility:visible;
-    transform: translateX(0);
+    width:50%;
   }
 }
 @media (max-width:1200px){
