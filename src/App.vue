@@ -1,5 +1,5 @@
 <template>
-
+  <div class='app'>
   <!-- 路由页面显示  -->
   <!-- <router-view></router-view> -->
     <router-view v-slot='{Component}'>
@@ -11,26 +11,37 @@
   <NavPart/>
   <!-- 左上角nab.图标 -->
   <WebNano/>
+  </div>
 </template>
 
 <script>
 import WebNano from './components/WebNano.vue'
 import NavPart from './components/NavPart.vue'
-import {ref,provide} from 'vue'
+import {ref,provide,reactive} from 'vue'
 export default {
   name: 'App',
   setup(){
     let allowChange=ref(false)
     let highlight=ref(0)
     let isAdmin=ref(false)
+    let topicColor=reactive(['#f87b7b','#F76C6C',"#cf6363"])
+    //是否允许切换路由
     provide("allowChange",allowChange)
+    //导航栏高光位置
     provide("highlight",highlight)
+    //是否拥有管理员权限
     provide("isAdmin",isAdmin)
+    //背景主题颜色
+    provide("topicColor",topicColor)
+    return{
+      topicColor
+    }
   },
   components: {
     WebNano,
     NavPart
   },
+  // 刷新后页面重定向到首页
   created() {
     if(this.$router.currentRoute.path!=='/home'){
       this.$router.replace('/home')
@@ -41,8 +52,6 @@ export default {
 </script>
 
 <style lang='less'>
-@mainColor1:#f87b7b;
-@mainColor2:#F76C6C;
 *{
   margin: 0; 
   padding: 0;
@@ -58,13 +67,17 @@ a{
 
 #app{
   width: 100%;
-  height: 100vh;
+  height: 100%;
+}
+.app{
+   width: 100%;
+  height: 100%;
+  background-color:v-bind('topicColor[1]');
 }
 body {
   width: 100vw;
   height: 100vh;
   position: relative;
-  background-color: @mainColor2;
   overflow-x: hidden;
 }
 </style>

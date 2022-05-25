@@ -9,7 +9,6 @@ import MyProject from "../pages/MyProject.vue";
 import MyLife from "../pages/MyLife.vue";
 import MyMsg from "../pages/MyMsg.vue";
 import AdLogin from "../pages/AdLogin.vue";
-import WebSettings from "../pages/WebSettings.vue";
 import ContactMe from "../pages/ContactMe.vue";
 const router = new createRouter({
   history: createWebHashHistory(),
@@ -47,11 +46,6 @@ const router = new createRouter({
       path: "/login",
       name: "login",
       component: AdLogin
-    },
-    {
-      path: "/settings",
-      name: "settings",
-      component: WebSettings
     },
     {
       path: "/contact",

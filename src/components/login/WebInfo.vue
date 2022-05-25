@@ -22,23 +22,21 @@ export default {
    },
    setup(){
     const isAdmin=inject('isAdmin')
+    const topicColor=inject('topicColor')
     return{
         isAdmin,
+        topicColor
     }
    }
 }
 </script>
 
 <style lang='less'>
-@mainColor1:#f87b7b;
-@mainColor2:#F76C6C;
 // 登录之后的界面样式
-.door{
-  height:1600px;
-}
 .personal{
   position: absolute;
-  height: 1600px; 
+  height: 1297px; 
+  background-color: v-bind('topicColor[0]');
   top:0;
   left: 0;
   right:0;
@@ -47,7 +45,6 @@ export default {
   flex-direction: column;
   justify-content: space-around;
   align-items: center; 
-  background-color: @mainColor1;
 }
 
 .personal-action-enter-active{

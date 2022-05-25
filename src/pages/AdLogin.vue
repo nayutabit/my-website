@@ -1,4 +1,5 @@
 <template>
+<!-- 管理员页面 -->
   <transition name='content' class='my-note' tag='div'>
     <div>
       <!-- 登录部分的页面 -->
@@ -8,8 +9,8 @@
     </div>  
   </transition>
   <!-- 左边的门儿 -->
-  <transition class='door left-door' tag='div' name='l-door'> 
-    <div></div>
+  <transition class='door left-door' tag='div' name='l-door' > 
+    <div :style='doorHeight'></div>
   </transition> 
   <!-- 右边的门儿 -->
   <transition class='door right-door' tag='div' name='r-door'> 
@@ -19,7 +20,7 @@
 <script >
 import WebInfo from '../components/login/WebInfo.vue'
 import AdminLogin from '../components/login/AdminLogin.vue'
-import {inject,onActivated} from 'vue'
+import {inject,onActivated,ref,watch} from 'vue'
 export default {
    name:'AdLogin',
    components:{
@@ -30,6 +31,7 @@ export default {
     const allowChange=inject('allowChange')     
     const highlight=inject('highlight')
     const isAdmin=inject('isAdmin')
+    const topicColor=inject('topicColor')
      onActivated(()=>{
        highlight.value=5
        allowChange.value=false
@@ -37,18 +39,32 @@ export default {
          allowChange.value=true
        },1000) 
      })
+    //解决登录成功之后页面长度发生变化导致两边的动画色块不能覆盖整个页面的问题
+    //动态赋予两边的色块高度
+    let doorHeight=ref('100%')
+    if(isAdmin!==false)doorHeight.value='1297px'
+    watch(isAdmin,(newVal)=>{
+       if(newVal==='')doorHeight.value='100%'
+       else doorHeight.value='1297px'
+    }),{immediate:true}
+
     return{
-      isAdmin
+      isAdmin,
+      doorHeight,
+      topicColor
     }
+   },
+   //路由跳转后滚动条如果不在初识位置，会引发页面抖动，为了消除抖动，在跳转前一刻将滚动条手动初始化
+   deactivated(){
+    setTimeout(()=>{
+       window.scrollTo(0,0)  
+    },599)
+   
    }
 }
 </script>
-
+ 
 <style lang='less' scoped>
-@mainColor1:#f87b7b;
-@mainColor2:#F76C6C;
-
-
 
 // 进场和离场动画
 .my-note{
@@ -59,8 +75,8 @@ export default {
   height: 100%;
   left:20%;
   right:20%;    
-
   visibility:hidden;
+  background-color: v-bind('topicColor[0]');
   animation:delayIn 0.6s 0.6s forwards; 
 }
 @keyframes delayIn{
@@ -85,9 +101,9 @@ export default {
 
 .door{
   position: absolute;
-  height: 100%;
+  height:v-bind(doorHeight);
   width:50%; 
-  background-color: @mainColor2; 
+  background-color:v-bind('topicColor[1]'); 
   visibility: hidden;
 }
 // 左门样式和动画

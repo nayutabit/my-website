@@ -81,6 +81,7 @@ export default {
     const allowChange=inject('allowChange')
     const highlight=inject('highlight')
     const isAdmin=inject('isAdmin')
+    const topicColor=inject('topicColor')
     onActivated(()=>{
       highlight.value=0
       allowChange.value=false
@@ -105,17 +106,14 @@ export default {
     return {
       pointSum,
       allowChange,
+      topicColor
     }
-  },
-  activated(){
-    
   },
   
 }
 </script>
 
 <style scoped lang='less'>
-@mainColor1:#f87b7b;
 .backLogo{
   position: absolute;
   left:50%;
@@ -138,7 +136,7 @@ export default {
       width: 2vh;
       height: 2vh;
       border-radius: 1vh;
-      background-color: @mainColor1;
+      background-color: v-bind('topicColor[0]');
       transform:rotate(45deg);
       transform-origin:6vh 6vh;
     }
@@ -168,13 +166,13 @@ export default {
         height: 1vh;
         border-radius: 0.5vh;
         visibility: hidden;
-        background-color: @mainColor1;
+        background-color: v-bind('topicColor[0]');
         animation:bridgeAction 1.5s 1.5s forwards
     }
   }
   #LOGON {
     position: absolute;
-    fill: @mainColor1;
+    fill: v-bind('topicColor[0]');
   // transform: skew(-29deg);
     visibility: hidden; 
     animation:action3 0.4s 3s forwards;
@@ -189,7 +187,7 @@ export default {
     }  
   }  
   .water{
-    fill:@mainColor1;  
+    fill:v-bind('topicColor[0]');  
     overflow: hidden; 
     .left-water1{
       transform-origin: right 115%;

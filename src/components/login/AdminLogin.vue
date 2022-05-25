@@ -33,6 +33,7 @@ export default {
         let username=ref('')
         let password=ref('')
         const isAdmin=inject('isAdmin')
+        const topicColor=inject('topicColor')
         // 点击登陆
         function login(){
         if(username.value===''||password.value===''){
@@ -56,12 +57,12 @@ export default {
             })
         }
         }  
-        
         return{
             username,
             password,
             login,
             isAdmin,
+            topicColor
         }
     }
 }
@@ -82,7 +83,7 @@ export default {
       width: 150px;
       height: 150px;
       background: #fff;
-      fill:#cf6363;
+      fill:v-bind('topicColor[2]');
       border-radius: 50%;
     }
     .t1{

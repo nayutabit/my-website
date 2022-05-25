@@ -37,8 +37,8 @@ export default {
       // 控制导航栏图标动画效果
       let startBeat=ref('')
       let changeable=true;
-      const navList=["首页","笔记","项目","生活","留言","登录","设置","联系我"]
-      const routePath=["homepage","note","project","life","msg","login","settings","contact",]  
+      const navList=["首页","笔记","项目","生活","留言","管理","联系我"]
+      const routePath=["homepage","note","project","life","msg","login","contact",]  
       const classList=reactive(['active','','','','','','',''])
       const highlight=inject('highlight')
       watch(highlight,(newVal,oldVal)=>{
@@ -65,6 +65,11 @@ export default {
           },1000)
         }
       }
+      // 导航栏固定在视口右上
+      let scroll=ref('')
+      window.addEventListener('scroll',()=>{
+        scroll.value=document.documentElement.scrollTop+'px'
+      })
       const allowChange=inject("allowChange")
       return {
          showWord,
@@ -73,7 +78,8 @@ export default {
          changeShow,
          routePath,
          allowChange,
-         classList
+         classList,
+         scroll
       }
    },
 }
@@ -87,7 +93,8 @@ export default {
   align-items: flex-end;
   right:50px;
   top:50px;
-  width: 150px;
+  width: 60px;
+  transform: translateY(v-bind(scroll));
   .nav-icon{
     position: relative;
     width: 45px;

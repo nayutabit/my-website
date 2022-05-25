@@ -19,6 +19,7 @@ export default {
    setup(){
     const allowChange=inject('allowChange')     
      const highlight=inject('highlight')
+     const topicColor=inject('topicColor')
      onActivated(()=>{
        highlight.value=1
        allowChange.value=false
@@ -26,13 +27,14 @@ export default {
          allowChange.value=true
        },1000)       
      })
+     return {
+       topicColor
+     }
    },
 }
 </script>
 
 <style lang='less' scoped>
-@mainColor1:#f87b7b;
-@mainColor2:#F76C6C;
 
 // 进场和离场动画
 .my-note{
@@ -43,7 +45,7 @@ export default {
   height: 100%;
   left:20%;
   right:20%;    
-  background-color: @mainColor1;
+  background-color: v-bind('topicColor[0]');
   // overflow: hidden;
   visibility:hidden;
   animation:delayIn 0.6s 0.6s forwards; 
@@ -72,7 +74,7 @@ export default {
   position: absolute;
   height: 100%;
   width:50%; 
-  background-color: @mainColor2; 
+  background-color: v-bind('topicColor[1]'); 
   visibility: hidden;
 }
 // 左门样式和动画

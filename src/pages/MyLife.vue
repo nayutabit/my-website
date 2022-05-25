@@ -1,6 +1,6 @@
 <template>
   <transition name='content' class='my-note' tag='div'>
-    <div>Life页</div>  
+    <div>life页</div>  
   </transition>
   <!-- 左边的门儿 -->
   <transition class='door left-door' tag='div' name='l-door'> 
@@ -19,6 +19,7 @@ export default {
    setup(){
     const allowChange=inject('allowChange')     
      const highlight=inject('highlight')
+     const topicColor=inject('topicColor')
      onActivated(()=>{
        highlight.value=3
        allowChange.value=false
@@ -26,22 +27,26 @@ export default {
          allowChange.value=true
        },1000)       
      })
+     return {
+       topicColor
+     }
    },
 }
 </script>
 
 <style lang='less' scoped>
-@mainColor1:#f87b7b;
-@mainColor2:#F76C6C;
-// 内容部分
+
+// 进场和离场动画
 .my-note{
+  display: flex;
+  align-items: center;
   position: absolute;
   top:0;
   height: 100%;
   left:20%;
   right:20%;    
-  background-color: @mainColor1;
-  overflow: hidden;
+  background-color: v-bind('topicColor[0]');
+  // overflow: hidden;
   visibility:hidden;
   animation:delayIn 0.6s 0.6s forwards; 
 }
@@ -69,7 +74,7 @@ export default {
   position: absolute;
   height: 100%;
   width:50%; 
-  background-color: @mainColor2; 
+  background-color: v-bind('topicColor[1]'); 
   visibility: hidden;
 }
 // 左门样式和动画
@@ -128,7 +133,9 @@ export default {
     width:50%;
   }
 }
-@media (max-width:1200px){
+
+//小屏幕留白减少
+@media (max-width:1920px){
 .my-note{
   left:12%;
   right:12%;    
@@ -175,6 +182,7 @@ export default {
 }
 }
 
+// 平板和手机上两边不留白
 @media (max-width:992px){
 .my-note{
   left:0%;
@@ -221,4 +229,5 @@ export default {
   }
 }
 }
+
 </style>
