@@ -58,7 +58,7 @@ export default {
    deactivated(){
     setTimeout(()=>{
        window.scrollTo(0,0)  
-    },599)
+    },550)
    
    }
 }

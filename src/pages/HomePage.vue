@@ -82,6 +82,8 @@ export default {
     const highlight=inject('highlight')
     const isAdmin=inject('isAdmin')
     const topicColor=inject('topicColor')
+    const serverAddress=inject('serverAddress')
+    const avatar=inject('avatar')
     onActivated(()=>{
       highlight.value=0
       allowChange.value=false
@@ -91,13 +93,14 @@ export default {
     })
     //  如果本地的token还有效则不需要再次登录
      onMounted(()=>{
-       axios.get('http://127.0.0.1:3007/my/userinfo',{
+       axios.get(serverAddress+'/my/userinfo',{
          headers:{
            authorization:localStorage.getItem('token')
          }
        }).then(res=>{
          if(res.data.status===0){
            isAdmin.value=res.data.data.username
+           avatar.value=res.data.data.user_pic
          }
         }).catch(err=>{
           console.log(err)

@@ -1,6 +1,8 @@
 <template>
   <transition name='content' class='my-note' tag='div'>
-    <div>contact页</div>  
+    <div>
+     <ContactInfo/>
+    </div> 
   </transition>
   <!-- 左边的门儿 -->
   <transition class='door left-door' tag='div' name='l-door'> 
@@ -14,8 +16,12 @@
 
 <script >
 import {inject,onActivated} from 'vue'
+import ContactInfo from '../components/contact/ContactInfo.vue'
 export default {
    name:'ContactMe',
+   components:{
+      ContactInfo
+   },
    setup(){
     const allowChange=inject('allowChange')     
      const highlight=inject('highlight')
@@ -43,8 +49,8 @@ export default {
   position: absolute;
   top:0;
   height: 100%;
-  left:20%;
-  right:20%;    
+  left:30%;
+  right:30%;    
   background-color: v-bind('topicColor[0]');
   // overflow: hidden;
   visibility:hidden;
@@ -92,13 +98,13 @@ export default {
   }
   100%{
     visibility:visible;
-    width:20%;
+    width:30%;
   }
 }
 @keyframes leftCome{
   0%{
     visibility:visible;
-    width:20%;
+    width:30%;
   }
   100%{
     visibility:visible;
@@ -120,66 +126,18 @@ export default {
   }
   100%{
     visibility:visible;
-    width:20%;
+    width:30%;
   }
 }
 @keyframes rightCome{
   0%{
     visibility:visible;
-    width:20%;
+    width:30%;
   }
   100%{
     visibility:visible;
     width:50%;
   }
-}
-
-//小屏幕留白减少
-@media (max-width:1920px){
-.my-note{
-  left:12%;
-  right:12%;    
-}
-@keyframes leftGo{
-  0%{
-    visibility:visible;
-    width:50%;
-  }
-  100%{
-    visibility:visible;
-    width:12%;
-  }
-}
-@keyframes leftCome{
-  0%{
-    visibility:visible;
-    width:12%;
-  }
-  100%{
-    visibility:visible;
-    width:50%;
-  }
-}
-@keyframes rightGo{
-  0%{
-    visibility:visible;
-    width:50%;
-  }
-  100%{
-    visibility:visible;
-    width:12%;
-  }
-}
-@keyframes rightCome{
-  0%{
-    visibility:visible;
-    width:12%;
-  }
-  100%{
-    visibility:visible;
-    width:50%;
-  }
-}
 }
 
 // 平板和手机上两边不留白

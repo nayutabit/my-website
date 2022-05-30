@@ -1,7 +1,7 @@
 <template>
 <!--  管理员账号登录后，页面上方头像和按钮部分 -->
   <div class='info'>
-    <div class='avatar'></div>
+    <img :src="avatar" class='avatar'>
     <p class='adName'>{{isAdmin}}</p>
     <span class='line'></span>
     <div class='select'>
@@ -17,10 +17,10 @@
         <div class='flex'>
           <!-- 上传图片部分 -->
           <div class='chose-file' v-show='resetAvatar'>
-            <span>选择图片</span>
-            <input type="file" accept="image/png, image/jpeg" >
+            <span >选择图片</span>
+            <input type="file" accept="image/png, image/jpeg" @change='getAvatar'>
           </div>
-          <button class='upload' v-show='resetAvatar'>上传图片</button>
+          <button class='upload' v-show='resetAvatar' @click='uploadAvatar'>上传图片</button>
           <!-- 重置密码部分 -->
           <input type="password" v-model='oldPassword' placeholder="请输入现在的密码" v-show='resetPassword' class='password'>
           <input type="password" v-model='newPassword' placeholder="请输入新的密码" v-show='resetPassword' class='password'>
@@ -43,6 +43,7 @@ export default {
     let resetPassword=ref(false)
     let oldPassword=ref('')
     let newPassword=ref('')
+    const serverAddress=inject('serverAddress')
     // 点击退出登录
     function logout(){
       localStorage.removeItem('token')
@@ -56,7 +57,7 @@ export default {
            alert('新旧密码不能相同')
         }else{
             //服务器地址暂定本机，上线后改云服务器
-            axios.post('http://127.0.0.1:3007/my/updatepwd',{
+            axios.post(serverAddress+'/my/updatepwd',{
               oldPwd:oldPassword.value,
               newPwd:newPassword.value
             },{
@@ -79,6 +80,68 @@ export default {
             })
         }        
     }
+    
+    // 从本地选择图片文件
+    let dataUrl=''
+    function getAvatar(e){
+      const file=e.target.files[0]
+      if(file.size>1024000){
+        alert('请传入1mb以内的图片')
+      }else{
+        const reader=new FileReader()
+        reader.readAsDataURL(file)
+        reader.onload=(event)=>{
+            dataUrl=event.target.result
+        }
+      }
+    }
+    // 上传图片到数据库
+    function uploadAvatar(){
+        if(dataUrl===''){
+            alert('图片不能为空')
+        }else{
+            //服务器地址暂定本机，上线后改云服务器
+            axios.post(serverAddress+'/my/update/avatar',{
+              avatar:dataUrl
+            },{
+              headers:{
+                authorization:localStorage.getItem('token')
+              }              
+            }
+            ).then(res=>{
+              if(res.data.status===0){
+                  alert('头像修改成功')
+                  avatar.value=dataUrl
+                  dataUrl=''
+                  resetAvatar.value=false
+              }else{
+                  alert('头像修改失败')
+              }
+              console.log(res)
+            }).catch(err=>{
+              alert('发生错误')
+              console.log(err)
+              console.log(dataUrl)
+            })
+        }   
+    }
+    // 挂载时读取数据库上的头像数据
+    let avatar=inject('avatar')
+    // onMounted(()=>{
+    //   axios.get(serverAddress+'/my/userinfo',{
+    //     headers:{
+    //       authorization:localStorage.getItem('token')
+    //     }              
+    //   }
+    //   ).then(res=>{
+    //     if(res.data.status===0){
+    //         avatar.value=res.data.data.user_pic
+    //     }
+    //   }).catch(err=>{
+    //     alert('发生错误')
+    //     console.log(err)
+    //   })      
+    // })
     return{
         isAdmin,
         logout,
@@ -87,7 +150,10 @@ export default {
         resetPassword,
         oldPassword,
         newPassword,
-        changePassword
+        changePassword,
+        getAvatar,
+        uploadAvatar,
+        avatar
     }
    }
 }

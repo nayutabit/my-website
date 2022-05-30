@@ -40,3 +40,42 @@
 1. 黑科技啊，css中使用v-bind()能直接读取data中的数据，绝了；琢磨了一下，原理大概是给当前组件最外层骨架添加一个内联样式，当前组件内的样式属性通过var（）来调用这个样式，遇到个坑，在当前组件内声明的变量，组件外的结构中的样式是无法使用的
 2. 今日完成：管理页面的响应式布局，整个网站的主题颜色一键切换，管理员密码修改功能
 3. 今天还差更改头像功能没搞完，明天再弄吧
+
+### 20220526
+1. 今日遇坑，图片上传到服务器时有默认的大小限制，nodejs默认为100kb，同时mysql数据库也有大小小智，普通的text大小是65535b，因此都需要进行调整，数据库的调整比较简单，就是把text换成mediumtext就行，nodejs的比较坑
+2. nodejs修改数据上传大小限制
+   ```javascript
+    //导入修改对上传的数据大小的限制的包
+    const bodyParser = require("body-parser");
+
+    // 修改对上传的数据大小的限制,图片的dataurl属于json
+    app.use(bodyParser.json({ limit: "1mb" }));
+    app.use(bodyParser.urlencoded({ limit: "1mb", extended: false }));
+    app.use(bodyParser.text({ limit: "1mb" }));   
+   ```
+3. 同源策略的坑，目前还没有解决：前后端功能部署在云服务器上之后，都安装ssl证书（同一个），开启https之后，前后端交互依然无法完成，报错ERR_SSL_PROTOCOL_ERROR，只能先不使用ssl证书了？
+### 20220527
+1. 昨天的问题解决了，nodejs开启https和前端页面开启方式不一样，需要在app.js中安装证书并且开启服务端口，这样https向https发送ajax请求就通畅了
+  ```javascript
+  const https = require("https");
+  const http = require("http");
+  let fs = require("fs");
+  const httpsOption = {
+    key: fs.readFileSync("./nayutabit.cn.key"),
+    cert: fs.readFileSync("./nayutabit.cn_bundle.pem")
+  };
+
+
+  http.createServer(app).listen(3007, () => {
+    console.log("http 3007 ready");
+  });
+
+  //服务器挂载的域名和证书的域名相同，https才会生效
+  https.createServer(httpsOption, app).listen(3008, () => {
+    console.log("https 3008 is ok");
+  });
+
+  ```
+2. 复刻出了AlloyTeam的二维码，感觉不错
+### 20220529
+1. 修复了登录之后不能及时显示头像的问题

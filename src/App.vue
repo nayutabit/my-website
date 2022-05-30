@@ -25,6 +25,8 @@ export default {
     let highlight=ref(0)
     let isAdmin=ref(false)
     let topicColor=reactive(['#f87b7b','#F76C6C',"#cf6363"])
+    let avatar=ref('')
+    const serverAddress='http://127.0.0.1:3007'
     //是否允许切换路由
     provide("allowChange",allowChange)
     //导航栏高光位置
@@ -33,6 +35,10 @@ export default {
     provide("isAdmin",isAdmin)
     //背景主题颜色
     provide("topicColor",topicColor)
+    // 服务器地址
+    provide("serverAddress",serverAddress)
+    //管理员头像
+    provide('avatar',avatar)
     return{
       topicColor
     }

@@ -19,7 +19,7 @@
         <span class='t2'>Administrator Login</span>
         <input type="text"  v-model='username' placeholder="请输入管理员账号">
         <input type="password"  v-model='password' placeholder="请输入密码">
-        <button class='btn' @click='login'>登录</button>
+        <button class='btn' @click='completeLogin'>登录</button>
     </div>      
     </transition>  
 </template>
@@ -34,13 +34,15 @@ export default {
         let password=ref('')
         const isAdmin=inject('isAdmin')
         const topicColor=inject('topicColor')
+        const serverAddress=inject('serverAddress')
+        const avatar=inject('avatar')
         // 点击登陆
         function login(){
         if(username.value===''||password.value===''){
             alert('账号或者密码不能为空')
         }else{
             //服务器地址暂定本机，上线后改云服务器
-            axios.post('http://127.0.0.1:3007/api/login',{
+            return axios.post(serverAddress+'/api/login',{
             username:username.value,
             password:password.value
             }).then(res=>{
@@ -57,10 +59,29 @@ export default {
             })
         }
         }  
+        function getAvatar(){
+          return axios.get(serverAddress+'/my/userinfo',{
+            headers:{
+              authorization:localStorage.getItem('token')
+            }
+          }).then(res=>{
+            if(res.data.status===0){
+              avatar.value=res.data.data.user_pic
+            }else{
+              console.log(res)
+            }
+            }).catch(err=>{
+              console.log(err)
+            })            
+        }
+        async function completeLogin(){
+          await login()
+          await getAvatar()
+        }
         return{
             username,
             password,
-            login,
+            completeLogin,
             isAdmin,
             topicColor
         }

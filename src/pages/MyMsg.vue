@@ -1,6 +1,8 @@
 <template>
   <transition name='content' class='my-note' tag='div'>
-    <div>msg页</div>  
+    <div>
+      <MessageBoard/>
+    </div>  
   </transition>
   <!-- 左边的门儿 -->
   <transition class='door left-door' tag='div' name='l-door'> 
@@ -13,9 +15,13 @@
 </template>
 
 <script >
+import MessageBoard from '../components/message/MessageBoard.vue'
 import {inject,onActivated} from 'vue'
 export default {
    name:'MyMsg',
+   components:{
+     MessageBoard
+   },
    setup(){
     const allowChange=inject('allowChange')     
      const highlight=inject('highlight')
@@ -31,6 +37,13 @@ export default {
        topicColor
      }
    },
+   //路由跳转后滚动条如果不在初识位置，会引发页面抖动，为了消除抖动，在跳转前一刻将滚动条手动初始化
+   deactivated(){
+    setTimeout(()=>{
+       window.scrollTo(0,0)  
+    },550)
+   
+   }   
 }
 </script>
 
@@ -42,9 +55,9 @@ export default {
   align-items: center;
   position: absolute;
   top:0;
-  height: 100%;
   left:20%;
-  right:20%;    
+  right:20%;  
+  height:2000px;  
   background-color: v-bind('topicColor[0]');
   // overflow: hidden;
   visibility:hidden;
@@ -72,7 +85,7 @@ export default {
 
 .door{
   position: absolute;
-  height: 100%;
+  height:2000px;
   width:50%; 
   background-color: v-bind('topicColor[1]'); 
   visibility: hidden;
