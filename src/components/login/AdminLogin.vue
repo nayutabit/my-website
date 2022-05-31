@@ -36,6 +36,7 @@ export default {
         const topicColor=inject('topicColor')
         const serverAddress=inject('serverAddress')
         const avatar=inject('avatar')
+        const adminId=inject('adminId')
         // 点击登陆
         function login(){
         if(username.value===''||password.value===''){
@@ -49,7 +50,7 @@ export default {
               if(res.data.status===0){
                   alert('登录成功')
                   localStorage.setItem('token',res.data.token)
-                  isAdmin.value=username.value
+                  isAdmin.value=username.value             
               }else{
                   alert('账号或密码错误')
               }
@@ -61,12 +62,13 @@ export default {
         }  
         function getAvatar(){
           return axios.get(serverAddress+'/my/userinfo',{
-            headers:{
+            headers:{ 
               authorization:localStorage.getItem('token')
             }
           }).then(res=>{
             if(res.data.status===0){
               avatar.value=res.data.data.user_pic
+              adminId.value=res.data.data.id                   
             }else{
               console.log(res)
             }

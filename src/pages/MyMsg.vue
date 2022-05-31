@@ -59,7 +59,6 @@ export default {
   right:20%;  
   height:2000px;  
   background-color: v-bind('topicColor[0]');
-  // overflow: hidden;
   visibility:hidden;
   animation:delayIn 0.6s 0.6s forwards; 
 }
@@ -199,7 +198,11 @@ export default {
 @media (max-width:992px){
 .my-note{
   left:0%;
-  right:0%;    
+  right:0%;  
+  height:2400px;  
+}
+.door{
+  height:2400px;
 }
 @keyframes leftGo{
   0%{
@@ -242,5 +245,12 @@ export default {
   }
 }
 }
-
+@media (max-width:768px){
+  .my-note{
+    height:3600px;
+  }
+  .door{
+    height:3600px;
+  }
+}
 </style>

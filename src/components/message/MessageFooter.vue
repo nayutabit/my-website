@@ -4,22 +4,72 @@
     <p v-else>管理员才能发布留言!</p>
     <div class='text'>
       <textarea maxlength="92" v-model='content'></textarea>
-      <span class='statistic'>{{content.length}}/100</span>
+      <span class='statistic'>{{content.length}}/92</span>
     </div>
-    <button class='btn'>发布留言</button>
+    <button class='btn' @click='uploadMsg'>发布留言</button>
   </div>
 </template>
 
 <script>
+import axios from 'axios'
 import {inject,ref} from 'vue'
 export default {
 name:'MessageFooter',
 setup(){
    const isAdmin=inject('isAdmin')
    let content=ref('')
+   const msgData=inject('msgData')
+   const serverAddress=inject('serverAddress')
+   const adminId=inject('adminId')
+    function addZero(n){
+        return n>9?n:'0'+n;
+    }      
+    function dateFormat (date){
+      const dataStr=new Date(date);
+      const y=addZero(dataStr.getFullYear());
+      const m=addZero(dataStr.getMonth()+1);
+      const d=addZero(dataStr.getDate());
+      const hh=addZero(dataStr.getHours());
+      const mm=addZero(dataStr.getMinutes());
+      const ss=addZero(dataStr.getSeconds());
+      return `${y}-${m}-${d} ${hh}:${mm}:${ss}`
+    } 
+   function uploadMsg(){
+     if(!isAdmin)alert('管理员才能发布留言哦')
+     else{
+       if(content.value==='')alert('留言不能为空')
+       else{
+        axios.post(serverAddress+'/my/msg',{
+          content:content.value
+        },{
+            headers:{ 
+              authorization:localStorage.getItem('token')
+            }
+          }).then(res=>{
+          if(res.data.status===0){
+              alert('留言发布成功')
+              msgData.unshift({
+                content:content.value,
+                date:dateFormat(new Date()),
+                author_name:isAdmin,
+                author_id:adminId.value,  
+                is_delete:0,
+              })
+              content.value=''
+          }else{
+              alert('留言发布失败')
+          }
+        }).catch(err=>{
+          alert('发生错误')
+          console.log(err)
+        })
+       }
+     }
+   }
    return {
      isAdmin,
-     content
+     content,
+     uploadMsg
    }
 }
 }

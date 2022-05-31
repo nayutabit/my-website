@@ -85,8 +85,8 @@ export default {
     let dataUrl=''
     function getAvatar(e){
       const file=e.target.files[0]
-      if(file.size>1024000){
-        alert('请传入1mb以内的图片')
+      if(file.size>204800){
+        alert('请传入200kb以内的图片')
       }else{
         const reader=new FileReader()
         reader.readAsDataURL(file)

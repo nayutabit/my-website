@@ -84,6 +84,7 @@ export default {
     const topicColor=inject('topicColor')
     const serverAddress=inject('serverAddress')
     const avatar=inject('avatar')
+    const adminId=inject('adminId')
     onActivated(()=>{
       highlight.value=0
       allowChange.value=false
@@ -101,6 +102,7 @@ export default {
          if(res.data.status===0){
            isAdmin.value=res.data.data.username
            avatar.value=res.data.data.user_pic
+           adminId.value=res.data.data.id
          }
         }).catch(err=>{
           console.log(err)
@@ -422,7 +424,7 @@ export default {
   }
 }
 
-@media (max-width:768px){
+@media (max-width:992px){
 .backLogo{
   width: 60vw;
 }

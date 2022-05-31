@@ -1,21 +1,18 @@
 <template>
   <div class='body'>
     <ul>
-      <li v-for='(p,index) of 18' :key='index' class='one-msg' :class="{lighter:(index%2===1)}">
+      <li v-for='(p,index) of msgData' :key='index' class='one-msg' :class="{lighter:(index%2===1)}" v-show='index>=(chosePage-1)*20'>
         <div class='addresser'>
-          <div class='avatar'></div>
+          <img class='avatar' :src='avatarMap.get(p.author_id)'>
           <div class='info'>
-              <p class='username'>administrator</p>
-              <p class='id'>id:001</p>
+              <p class='username'>{{p.author_name}}</p>
+              <p class='id'>id:{{p.author_id}}</p>
           </div>
         </div>
-        <p class='text'>林动默不作声啊啊啊啊啊啊啊啊啊啊啊啊啊阿啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊阿林动默不作声啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊阿啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊阿啊啊啊啊啊啊啊啊
-
-</p>
+        <p class='text'>{{p.content}}</p>
         <div class='annotation'>
-          <span class='date'>2022-5-30 18:33</span>          
-          <span class='edit' v-show='isAdmin'>编辑</span>
-          <span class='edit' v-show='isAdmin'>删除</span>
+          <span class='date'>{{p.date}}</span>          
+          <span class='edit' v-show='isAdmin' @click='deleteMsg(index,p.id)' >删除</span>
         </div>
       </li>    
     </ul>
@@ -28,15 +25,68 @@
 </template>
 
 <script>
-import {inject,ref} from 'vue'
+import axios from 'axios'
+import {inject,ref,onMounted,reactive} from 'vue'
 export default {
 name:'MessageBody',
 setup(){
   const isAdmin=inject('isAdmin')
+  const serverAddress=inject('serverAddress')
   let chosePage=ref(1)
+  const msgData=inject('msgData')
+  const avatarMap=reactive(new Map())
+  function deleteMsg(index,msgId){
+      axios.post(serverAddress+'/my/deletemsg',{
+        id:msgId
+      },{
+          headers:{ 
+            authorization:localStorage.getItem('token')
+          }
+        }).then(res=>{
+          console.log(res)
+        if(res.data.status===0){
+            alert('删除成功')   
+            msgData.splice(index,1)       
+        }else{
+            alert('删除失败')
+        }
+      }).catch(err=>{
+        alert('发生错误')
+        console.log(err)
+      })
+     
+  }
+  onMounted(()=>{
+      axios.get(serverAddress+'/api/msg').then(res=>{
+        if(res.data.status===0){
+          for(const k of res.data.data){
+              msgData.push(k)
+          }
+          console.log(msgData)
+        }else{
+          console.log(res)
+        }
+        }).catch(err=>{
+          console.log(err)
+        }) 
+      axios.get(serverAddress+'/api/admin_pic').then(res=>{
+        if(res.data.status===0){
+          for(const k of res.data.data){
+              avatarMap.set(k.id,k.user_pic)
+          }
+        }else{
+          console.log(res)
+        }
+        }).catch(err=>{
+          console.log(err)
+        }) 
+  })
   return{
     isAdmin,
-    chosePage
+    chosePage,
+    msgData,
+    avatarMap,
+    deleteMsg
   }
 }
 }
@@ -52,6 +102,8 @@ setup(){
         display: flex;
         flex-direction: column;
         align-content: center;
+        height: 1600px;
+        overflow: hidden;
         .one-msg{
           position: relative;          
           height: 80px;
@@ -68,10 +120,11 @@ setup(){
             .avatar{
               display: inline-block;
               width: 60px;
-              height: 60px;
+              height: 100%;
               background-color: red;
             }
             .info{
+              color:#263366;
               position: relative;
               top:-10px;
               height: 60px;
@@ -119,18 +172,87 @@ setup(){
         height: 50px;
         position: absolute;
         bottom:0;
+        left:0;
         display: flex;
         align-items: center;
         justify-content: center;
+        font:700 16px/1 "sofia-pro", sans-serif;    
+        color:rgba(0, 0, 0, 0.473);  
+        cursor: pointer;                  
         span{
-          font:700 16px/1 "sofia-pro", sans-serif;
-          color:rgba(0, 0, 0, 0.473);
-          cursor: pointer;
           padding:0 5px;
           &.active{
             color:#fff;
           }
         }
       }
+      .page-M{    
+        display: none;        
+      }
+      .page-S{
+        display: none;
+      }
+      .page-L{
+        display: flex;
+      }
   }
+  @media (max-width:992px){
+    .body{
+      width: 87%;
+      height:2050px;
+      ul{
+        height:2000px;
+        .one-msg{
+          height: 100px;
+          .addresser{
+            height:80px;
+            .avatar{
+              width: 80px;
+            }
+            .info{
+              .username{
+                margin-bottom:30px;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+  @media (max-width:768px){
+    .body{
+      width: 100%;
+      height:3250px;
+      ul{
+        height:3200px;
+        .one-msg{
+        height: 160px;
+        padding-left:0;
+        .addresser{
+          height:140px;
+          width: 100px;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          .avatar{
+            width: 80px;
+            height: 80px;;
+          }
+          .info{
+            font-size:12px;
+            top:15px;
+            height: 40px;
+            margin-left:5px;
+            .username{
+              margin-bottom:5px;
+            }
+          }
+        }
+        .text{
+          font-size:14px;
+        }
+      }   
+      }
+    }
+  }  
 </style>
