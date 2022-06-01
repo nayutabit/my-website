@@ -6,7 +6,8 @@
       <textarea maxlength="92" v-model='content'></textarea>
       <span class='statistic'>{{content.length}}/92</span>
     </div>
-    <button class='btn' @click='uploadMsg'>发布留言</button>
+    <button class='btn' @click='uploadMsg' v-if='isAdmin'>发布留言</button>
+    <button class='btn cant' v-else>无发布权限</button>
   </div>
 </template>
 
@@ -19,21 +20,21 @@ setup(){
    const isAdmin=inject('isAdmin')
    let content=ref('')
    const msgData=inject('msgData')
-   const serverAddress=inject('serverAddress')
-   const adminId=inject('adminId')
-    function addZero(n){
-        return n>9?n:'0'+n;
-    }      
-    function dateFormat (date){
-      const dataStr=new Date(date);
-      const y=addZero(dataStr.getFullYear());
-      const m=addZero(dataStr.getMonth()+1);
-      const d=addZero(dataStr.getDate());
-      const hh=addZero(dataStr.getHours());
-      const mm=addZero(dataStr.getMinutes());
-      const ss=addZero(dataStr.getSeconds());
-      return `${y}-${m}-${d} ${hh}:${mm}:${ss}`
-    } 
+   const serverAddress=inject('serverAddress')    
+   function updateMsg(){
+         axios.get(serverAddress+'/api/msg').then(res=>{
+        if(res.data.status===0){
+          msgData.splice(0,msgData.length)
+          for(const k of res.data.data){
+              msgData.push(k)
+          }
+        }else{
+          console.log(res)
+        }
+        }).catch(err=>{
+          console.log(err)
+        })   
+   }
    function uploadMsg(){
      if(!isAdmin)alert('管理员才能发布留言哦')
      else{
@@ -48,13 +49,7 @@ setup(){
           }).then(res=>{
           if(res.data.status===0){
               alert('留言发布成功')
-              msgData.unshift({
-                content:content.value,
-                date:dateFormat(new Date()),
-                author_name:isAdmin,
-                author_id:adminId.value,  
-                is_delete:0,
-              })
+              updateMsg()
               content.value=''
           }else{
               alert('留言发布失败')
@@ -114,7 +109,11 @@ setup(){
       font:400 16px/1 "sofia-pro", sans-serif;
       color:#fff;
       border:none;
-      cursor: pointer;      
+      cursor: pointer;    
+      &.cant{
+       background-color: rgb(97, 97, 97);  
+       cursor: default;
+      }  
     }
 }
 </style>

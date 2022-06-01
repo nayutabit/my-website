@@ -42,7 +42,6 @@ export default {
     setTimeout(()=>{
        window.scrollTo(0,0)  
     },550)
-   
    }   
 }
 </script>

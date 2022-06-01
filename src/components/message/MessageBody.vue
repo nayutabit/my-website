@@ -36,6 +36,7 @@ setup(){
   const msgData=inject('msgData')
   const avatarMap=reactive(new Map())
   function deleteMsg(index,msgId){
+    if(confirm('确认删除')){
       axios.post(serverAddress+'/my/deletemsg',{
         id:msgId
       },{
@@ -43,18 +44,17 @@ setup(){
             authorization:localStorage.getItem('token')
           }
         }).then(res=>{
-          console.log(res)
         if(res.data.status===0){
-            alert('删除成功')   
             msgData.splice(index,1)       
         }else{
+            console.log(res)
             alert('删除失败')
         }
       }).catch(err=>{
         alert('发生错误')
         console.log(err)
       })
-     
+    }
   }
   onMounted(()=>{
       axios.get(serverAddress+'/api/msg').then(res=>{
@@ -62,7 +62,6 @@ setup(){
           for(const k of res.data.data){
               msgData.push(k)
           }
-          console.log(msgData)
         }else{
           console.log(res)
         }

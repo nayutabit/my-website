@@ -26,9 +26,8 @@ export default {
     let isAdmin=ref(false)
     let topicColor=reactive(['#f87b7b','#F76C6C',"#cf6363"])
     let avatar=ref('')
-    let adminId=ref(-1)
     let msgData=reactive([])
-    const serverAddress='https://nayutabit.cn:3007'
+    const serverAddress='http://127.0.0.1:3007'
     //是否允许切换路由
     provide("allowChange",allowChange)
     //导航栏高光位置
@@ -41,8 +40,6 @@ export default {
     provide('avatar',avatar)
    //是否拥有管理员权限
     provide("isAdmin",isAdmin)  
-    //当前管理员id
-    provide('adminId',adminId)  
     //留言数据
     provide('msgData',msgData)
     return{
