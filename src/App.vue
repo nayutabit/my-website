@@ -66,14 +66,12 @@ export default {
   padding: 0;
   box-sizing: border-box;
 }
-
-li{
-  list-style: none;
-}
 a{
   text-decoration: none;
 }
-
+li{
+  list-style: none;
+}
 #app{
   width: 100%;
   height: 100%;

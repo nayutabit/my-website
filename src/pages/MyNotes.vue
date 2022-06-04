@@ -58,7 +58,6 @@ export default {
   left:20%;
   right:20%;    
   background-color: v-bind('topicColor[0]');
-  // overflow: hidden;
   visibility:hidden;
   animation:delayIn 0.6s 0.6s forwards; 
 }

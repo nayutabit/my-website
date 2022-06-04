@@ -74,6 +74,7 @@ setup(){
         flex:1 1 1;
         width: 100%;
         li{
+            list-style: none;
             width: 23%;
             height: 200px;
             .item{

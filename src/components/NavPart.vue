@@ -111,6 +111,7 @@ export default {
    overflow: hidden;
    li{
       padding:5px 0;
+      list-style: none;
       a{
          display: block;
          color:rgba(0,0,0,0.4);
