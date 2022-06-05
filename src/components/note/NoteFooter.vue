@@ -7,7 +7,7 @@
         <textarea v-model='content' v-show='!isPreview'></textarea> 
         <!-- <div class='preview' v-html='preContent' v-show='isPreview'></div> -->
         <!-- 此处必须v-if不能用v-show，否则由于setup不会重新挂载导致prop无法被动态接收 -->
-        <MdPreview v-if='isPreview' :preContent="content"/>
+        <MdPreview v-if='isPreview' :preContent="content+'\n\n'+pictures.join('\n')"/>
       </div>
       <div class="foot">
         <div  class='select'>
@@ -29,16 +29,28 @@
                 <input type="radio" name='classify'>
             </label>                    
         </div>
-        <button @click='isPreview=!isPreview'>
-          预览
-          <svg  :class="{close:!isPreview}" viewBox="0 0 1792 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="10824" width="20" height="20">
-            <path
-              d="M1694.74304 320A1344 1344 0 0 0 896.02304 0 1344 1344 0 0 0 97.30304 320a238.08 238.08 0 0 0 0 384A1344 1344 0 0 0 896.02304 1024a1344 1344 0 0 0 798.72-320 238.08 238.08 0 0 0 0-384zM896.02304 896a384 384 0 1 1 384-384 384 384 0 0 1-384 384z"
-              fill='#000'
-            ></path>
-            <path d="M896.02304 512m-256 0a256 256 0 1 0 512 0 256 256 0 1 0-512 0Z" ></path>
-          </svg>
-          </button>            
+        <div class='function'>
+          <span class='get-img' @change='getPic'>
+            <svg class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="13846" width="20" height="20">
+              <path
+                d="M769.3 154.8H258.7c-92.9 0-168.5 75.6-168.5 168.5v379.8c0 92.9 75.6 168.5 168.5 168.5h510.5c92.9 0 168.5-75.6 168.5-168.5V323.3c0.1-92.9-75.5-168.5-168.4-168.5z m-372 146c48.4 0 87.7 39.2 87.7 87.7 0 48.4-39.2 87.7-87.7 87.7-48.4 0-87.7-39.2-87.7-87.7 0.1-48.4 39.3-87.7 87.7-87.7z m-117 407l120.2-187.3 85.8 121L606.6 460l154.5 247.8H280.3z"
+              ></path>
+            </svg>            
+            <span>添加图片</span>
+            <input type="file" accept="image/png, image/jpeg">            
+          </span>    
+          <button @click='isPreview=!isPreview'>
+            预览
+            <svg  :class="{close:!isPreview}" viewBox="0 0 1792 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="10824" width="20" height="20">
+              <path
+                d="M1694.74304 320A1344 1344 0 0 0 896.02304 0 1344 1344 0 0 0 97.30304 320a238.08 238.08 0 0 0 0 384A1344 1344 0 0 0 896.02304 1024a1344 1344 0 0 0 798.72-320 238.08 238.08 0 0 0 0-384zM896.02304 896a384 384 0 1 1 384-384 384 384 0 0 1-384 384z"
+                fill='#000'
+              ></path>
+              <path d="M896.02304 512m-256 0a256 256 0 1 0 512 0 256 256 0 1 0-512 0Z" ></path>
+            </svg>
+            </button>                
+        </div>
+        
       </div>
     </div>    
     <button class='btn'>添加笔记</button>
@@ -47,7 +59,7 @@
 
 <script>
 import MdPreview from './MdPreview.vue'
-import {ref} from 'vue'
+import {ref,reactive} from 'vue'
 export default {
 name:'NoteFooter',
 components:{
@@ -56,9 +68,27 @@ components:{
 setup(){
   const isPreview=ref(false)
   const content=ref('')
+  // 存储每个文章的图片
+  const pictures=reactive([])
+  // 插入图片:使用base64将图片和文章绑定在一起
+  function getPic(e){
+    const file=e.target.files[0]
+    if(file.size>204800){
+      alert('请传入200kb以内的图片')
+    }else{
+      const reader=new FileReader()
+      reader.readAsDataURL(file)
+      reader.onload=(event)=>{
+          pictures.push(`[pic_${pictures.length}]:`+event.target.result+'\n')
+          content.value+=`![${e.target.files[0].name}][pic_${pictures.length-1}]\n`
+      }
+    }
+  }  
   return{
     isPreview,
     content,
+    getPic,
+    pictures
   }
 }
 }
@@ -93,11 +123,10 @@ setup(){
       .text{
         width: 100%;
         height: 750px;
-        overflow: auto;
         background-color: #fff;
         textarea{
           padding:0 10px;
-          height: 1000px;
+          height: 100%;
           resize:none;
           width: 100%;
           border:none;
@@ -123,17 +152,36 @@ setup(){
             margin-right:10px;
           }
         }
-        button{
-          cursor: pointer;
-          border:none;
-          background-color: transparent;
+        .function{
           display:flex;
-          align-items: center;   
-          font-size: 18px;    
-          .close{
-            fill:#fff;
-          }   
+          align-items: center;    
+          .get-img{  
+            position: relative;
+            width: 100px;
+            overflow: hidden;
+            display:flex;
+            align-items: center;  
+            input{
+              opacity: 0;  
+              position: absolute;
+              left:0;
+            }   
+   
+          }        
+          button{
+            padding:0 5px;
+            cursor: pointer;
+            border:none;
+            background-color: transparent;
+            display:flex;
+            align-items: center;   
+            font-size: 18px;    
+            .close{
+              fill:#fff;
+            }   
+          }
         }
+
       }
     }
     p{

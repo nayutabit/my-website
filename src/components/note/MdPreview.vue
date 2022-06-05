@@ -22,12 +22,10 @@ export default {
         gfm: true,
         tables:true,
         breaks: false,
-        sanitize: true,
         smartLists: true,
-        smartypants: true,
-        xhtml: false
+        smartypants: false,
     });    
-    const content=ref(marked.parse(props.preContent))    
+    const content=ref(marked.parse(props.preContent))     
     return {
         content
     }
@@ -37,10 +35,11 @@ export default {
 
 <style  lang='less'>
 .hljs{
-    background-color: green;
+    background-color: rgb(243, 243, 243);
 }
 .preview{
-    color:#000;
+    overflow: auto;
+    height: 100%;
     padding:0 10px;  
     li{
         list-style: decimal inside;     

@@ -23,6 +23,9 @@ export default {
      NoteBoard
    },
    setup(){
+     window.addEventListener('beforeunload',()=>{
+        console.log('aaa')
+     }) 
     const allowChange=inject('allowChange')     
      const highlight=inject('highlight')
      const topicColor=inject('topicColor')
@@ -37,12 +40,6 @@ export default {
        topicColor
      }
    },
-   //路由跳转后滚动条如果不在初识位置，会引发页面抖动，为了消除抖动，在跳转前一刻将滚动条手动初始化
-   deactivated(){
-    setTimeout(()=>{
-       window.scrollTo(0,0)  
-    },550)
-   }     
 }
 </script>
 

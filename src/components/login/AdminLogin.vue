@@ -36,7 +36,6 @@ export default {
         const topicColor=inject('topicColor')
         const serverAddress=inject('serverAddress')
         const avatar=inject('avatar')
-        const adminId=inject('adminId')
         // 点击登陆
         function login(){
         if(username.value===''||password.value===''){
@@ -67,8 +66,7 @@ export default {
             }
           }).then(res=>{
             if(res.data.status===0){
-              avatar.value=res.data.data.user_pic
-              adminId.value=res.data.data.id                   
+              avatar.value=res.data.data.user_pic                  
             }else{
               console.log(res)
             }

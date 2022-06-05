@@ -33,7 +33,7 @@
     <div class="content">
       <ul>
         <li v-for='k,index of presentNotes' :key='index' :class="{lighter:(index%2===1),fly:choseArticle===index}" v-show='choseArticle===index||choseArticle===-1'>
-          <div class='title' @click='choseArticle=choseArticle===index?-1:index'>
+          <div class='title' @click='changeSelect(index)'>
             <span class='title-text'>{{k.title}}</span>
             <span class='class'>| {{tags[k.tag]}} |</span>
             <svg class="icon" v-show='choseArticle!==index' viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="1300">
@@ -50,24 +50,79 @@
           </div>
           <div class='article' v-show='choseArticle===index'>
             <div class='article-nav'>
-              <p class='author'>作者:{{k.author_name}}</p>
-              <div class='edit' v-show='isAdmin===k.author_name'>            
-                <button>
-                  <svg class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="6292" width="15" height="15">
+              <div class='block'>
+                <p class='author'>作者:{{k.author_name}}</p>
+                <div class='edit' v-show='isAdmin===k.author_name'>            
+                  <button @click='isEdit=!isEdit' v-show='!isEdit'>
+                    <svg class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="6292" width="15" height="15">
+                      <path
+                        d="M815.8 318.8L705.9 209c-19.5-19.5-19.5-51.2 0-70.7l59.7-59.7c19.5-19.5 51.2-19.5 70.7 0l109.8 109.8c19.5 19.5 19.5 51.2 0 70.7l-59.7 59.7c-19.5 19.6-51.1 19.6-70.6 0zM751.2 453.4c18.8-18.8 23.5-44.5 10.5-57.4L628.1 262.3c-12.9-12.9-38.6-8.2-57.4 10.5L81.3 749.2c-9.4 9.4-15.3 21.4-16.5 33.5l0.2 133.8c-2.4 25.2 17.4 45 42.6 42.6l133.8 1.1c12.1-1.2 24.2-7.1 33.5-16.5l476.3-490.3zM908.9 831.7H559.8c-13.4 0-26.2 5.3-35.6 14.8-17.1 17.2-45.3 46.3-68.8 70.7-15.2 15.8-4 42.1 17.9 42.1h435.3c28 0 50.9-22.9 50.9-50.9v-26.3c-0.2-27.7-22.8-50.4-50.6-50.4z"
+                      ></path>
+                    </svg>                    
+                    编辑</button>
+                  <button v-show='!isEdit'>
+                    <svg class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="7139" width="12" height="12">
+                      <path d="M96 128h832v64H96zM128 256h768l-89.024 704H217.024z"></path>
+                      <path d="M384 64h256v96h-256z"></path>
+                    </svg> 
+                    删除</button>   
+                  <button v-show='isEdit' @click='save'>
+                    <svg  class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="8403" width="16" height="16">
+                      <path d="M640 128H192a64.19 64.19 0 0 0-64 64v640a64.19 64.19 0 0 0 64 64h640a64.19 64.19 0 0 0 64-64V384z m0 224H192V192h448z"></path>
+                    </svg>
+                    保存</button> 
+                  <button v-show='isEdit' @click='saveDraft'>
+                    <svg  class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="10345" width="14" height="14">
+                      <path
+                        d="M731.13 256H292.05a36 36 0 0 0 0 72h439.08a36 36 0 0 0 0-72zM541 475.88H292a36 36 0 0 0 0 72h249a36 36 0 0 0 0-72zM412.39 695.8H292.05a36 36 0 1 0 0 72h120.34a36 36 0 1 0 0-72z"
+                      ></path>
+                      <path
+                        d="M824 64H200a72 72 0 0 0-72 72v752a72 72 0 0 0 72 72h346.18a72 72 0 0 0 50.91-21.09l277.82-277.82A72 72 0 0 0 896 610.18V136a72 72 0 0 0-72-72zM200 888V136h624v432H576a72 72 0 0 0-72 72v248H200z m376-29.82V640h218.18z"
+                      ></path>
+                    </svg>
+                    保存到草稿</button>  
+                  <button v-show='isEdit'  @click='takeOut'>
+                    <svg class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="45495" width="15" height="15">
+                      <path
+                        d="M671.288889 818.3808c-46.648889 0-124.404622 13.744356-136.533333 45.4656l0 0.705422c-27.0336 0.705422-33.427911 0-45.511111 0-12.105956-31.766756-89.884444-45.511111-136.533333-45.511111l-250.311111 0 0-659.911111 272.156444 0c58.732089 0 109.522489 30.173867 137.4208 74.706489 27.898311-44.532622 78.711467-74.706489 137.466311-74.706489L921.6 159.1296l0 659.2512L671.288889 818.3808zM489.244444 295.662933c0-53.202489-57.457778-91.022222-113.777778-91.022222l-227.555556 0 0 568.888889c0 0 162.178844 0 204.8 0 45.147022-0.796444 116.349156 0.477867 136.533333 33.723733l0-25.486222c-0.864711-31.493689-0.045511-74.501689 0-76.276622L489.244444 310.340267c0-0.022756 0-0.022756 0-0.045511L489.244444 295.662933zM876.088889 204.5952l-227.555556 0c-56.32 0-113.777778 37.796978-113.777778 90.9312l0 14.904889c0 0.022756 0 0.022756 0 0.045511l0 394.467556c0.045511 1.752178 0.864711 44.760178 0 76.1856l0 25.463467c20.184178-33.200356 91.386311-34.497422 136.533333-33.678222 42.621156 0 204.8 0 204.8 0L876.088889 204.5952z"
+                      ></path>
+                    </svg>
+                    取出草稿</button>   
+                  <button v-show='isEdit' @click='backOut'>
+                    <svg class="icon" viewBox="0 0 1140 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="46316" width="15" height="15">
+                      <path
+                        d="M474.133828 76.681372c-261.931418 0-474.133828 212.297312-474.133828 474.133828 0 261.836515 212.20241 474.133828 474.133828 474.133828s474.133828-212.297312 474.133828-474.133828C948.267655 288.978684 735.970343 76.681372 474.133828 76.681372zM521.774977 637.271548 521.774977 521.774977c-57.321223 0-203.471362 1.328638-203.471362 158.487488 0 82.28063 55.80278 150.990176 130.016682 166.838925C329.217424 830.208712 237.066914 724.487118 237.066914 595.134754c0-240.293605 245.228545-242.286562 284.708063-242.286562L521.774977 254.529008l189.330862 192.08304L521.774977 637.271548z"
+                      ></path>
+                    </svg>
+                    取消编辑</button>                                                                                
+                </div>  
+              </div>
+              <div class='block' v-show='isEdit'>
+                <span class='get-img' @change='getPic'>
+                  <svg class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="13846" width="20" height="20">
                     <path
-                      d="M815.8 318.8L705.9 209c-19.5-19.5-19.5-51.2 0-70.7l59.7-59.7c19.5-19.5 51.2-19.5 70.7 0l109.8 109.8c19.5 19.5 19.5 51.2 0 70.7l-59.7 59.7c-19.5 19.6-51.1 19.6-70.6 0zM751.2 453.4c18.8-18.8 23.5-44.5 10.5-57.4L628.1 262.3c-12.9-12.9-38.6-8.2-57.4 10.5L81.3 749.2c-9.4 9.4-15.3 21.4-16.5 33.5l0.2 133.8c-2.4 25.2 17.4 45 42.6 42.6l133.8 1.1c12.1-1.2 24.2-7.1 33.5-16.5l476.3-490.3zM908.9 831.7H559.8c-13.4 0-26.2 5.3-35.6 14.8-17.1 17.2-45.3 46.3-68.8 70.7-15.2 15.8-4 42.1 17.9 42.1h435.3c28 0 50.9-22.9 50.9-50.9v-26.3c-0.2-27.7-22.8-50.4-50.6-50.4z"
+                      d="M769.3 154.8H258.7c-92.9 0-168.5 75.6-168.5 168.5v379.8c0 92.9 75.6 168.5 168.5 168.5h510.5c92.9 0 168.5-75.6 168.5-168.5V323.3c0.1-92.9-75.5-168.5-168.4-168.5z m-372 146c48.4 0 87.7 39.2 87.7 87.7 0 48.4-39.2 87.7-87.7 87.7-48.4 0-87.7-39.2-87.7-87.7 0.1-48.4 39.3-87.7 87.7-87.7z m-117 407l120.2-187.3 85.8 121L606.6 460l154.5 247.8H280.3z"
                     ></path>
-                  </svg>                    
-                  编辑</button>
-                <button>
-                  <svg class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="7139" width="12" height="12">
-                    <path d="M96 128h832v64H96zM128 256h768l-89.024 704H217.024z"></path>
-                    <path d="M384 64h256v96h-256z"></path>
+                  </svg>            
+                  <span>添加图片</span>
+                  <input type="file" accept="image/png, image/jpeg">            
+                </span>    
+                <button @click='isPreview=!isPreview' class='pr'>
+                  预览
+                  <svg  :class="{close:!isPreview}" viewBox="0 0 1792 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="10824" width="20" height="20">
+                    <path
+                      d="M1694.74304 320A1344 1344 0 0 0 896.02304 0 1344 1344 0 0 0 97.30304 320a238.08 238.08 0 0 0 0 384A1344 1344 0 0 0 896.02304 1024a1344 1344 0 0 0 798.72-320 238.08 238.08 0 0 0 0-384zM896.02304 896a384 384 0 1 1 384-384 384 384 0 0 1-384 384z"
+                      fill='#000'
+                    ></path>
+                    <path d="M896.02304 512m-256 0a256 256 0 1 0 512 0 256 256 0 1 0-512 0Z" ></path>
                   </svg>
-                  删除</button>     
-              </div>  
-            </div>                 
-            <p class='text' v-html='k.content'></p>
+                  </button>                   
+              </div>
+            </div>  
+            <div class='article-content'>
+             <MdPreview :preContent="k.content+'\n\n'+k.pic" v-if='!isEdit'/>
+             <textarea v-else v-model='k.content'></textarea>           
+            </div>               
           </div>            
         </li>
       </ul>
@@ -82,10 +137,13 @@
 </template>
 
 <script>
-import {marked} from 'marked'
+import MdPreview from './MdPreview.vue'
 import {ref,reactive,watchEffect,inject} from 'vue'
 export default {
 name:'NoteBody',
+components:{
+  MdPreview
+},
 setup(){
   //所有标签
   const tags=reactive(['算法','工具学习','项目经验','其它','全选'])
@@ -98,12 +156,17 @@ setup(){
   // 当前页面显示的信息
   const presentNotes=reactive(new Array(20))
   //一次从数据库申请来的所有信息
-  const allNotes=new Array(42).fill({title:'来了！就在今天！我滴夜阑！',tag:1,date:'2022-6-2 14:18:52',noteId:0,author_name:'administrator',author_id:0,content:'### 测试一下 \n 1. 今天'})
+  const allNotes=new Array(42).fill({title:'来了！就在今天！我滴夜阑！',tag:1,date:'2022-6-2 14:18:52',noteId:0,author_name:'administrator',author_id:0,content:'### 测试一下 \n 1. 今天',pic:''})
   //符合筛选条件的信息
   const okNotes=new Array
   //确定展开搜索的关键词
   const keywords=ref('');
   const isAdmin=inject('isAdmin')
+  //文章是否处于编辑状态
+  const isEdit=ref(false)
+  // 文章是否处于预览状态
+  const isPreview=ref(true)
+
 
   //自动更新页面内容
   watchEffect(()=>{
@@ -117,8 +180,6 @@ setup(){
     for(let i=0;i<20;i++){
       if(okNotes[i+(chosePage.value-1)*20]){
         presentNotes[i]=okNotes[i+(chosePage.value-1)*20]
-        //解析md格式
-        presentNotes[i].content=marked.parse(presentNotes[i].content)
       }
     }    
   })
@@ -141,6 +202,48 @@ setup(){
       }
     }
   }
+  //选择文章
+  function changeSelect(index){
+    if(choseArticle.value===index){
+      if(isEdit.value){
+        if(confirm('是否撤销编辑')){
+          console.log('撤销了编辑')
+          isEdit.value=false
+          choseArticle.value=-1
+        }
+      }else choseArticle.value=-1
+    }else{
+      choseArticle.value=index
+    }
+  }
+
+
+  // 编辑后保存
+  function save(){
+    if(confirm('是否保存更改？')){
+      console.log('保存了');
+      isEdit.value=false;
+    }
+  }
+  //保存到草稿
+  function saveDraft(){
+    if(confirm('是否保存到草稿？')){
+      console.log('保存到草稿了');
+    }
+  }
+  //从草稿取出
+  function takeOut(){
+    if(confirm('是否取出之前所保存的草稿，这样会覆盖当前编辑界面的内容？')){
+      console.log('取出了草稿');
+    }
+  }
+  //取消编辑
+  function backOut(){
+    if(confirm('是否放弃当前页面的更改？')){
+      console.log('撤销了编辑');
+      isEdit.value=false;      
+    }
+  }
   // 根据关键词筛选
   return{
     chosePage,
@@ -150,9 +253,16 @@ setup(){
     choseArticle,
     presentNotes,
     keywords,
-    isAdmin
+    isAdmin,
+    isEdit,
+    isPreview,
+    save,
+    saveDraft,
+    takeOut,
+    backOut,
+    changeSelect
   }
-}
+},
 }
 </script>
 
@@ -275,24 +385,67 @@ setup(){
             height: 950px;
             background:rgba(255, 255, 255, 0.819);
             padding:10px 20px;
+            .article-content{
+              height: 910px;
+              textarea{
+                padding:0 10px;
+                height: 100%;
+                resize:none;
+                width: 100%;
+                border:none;
+                outline:none;    
+                font-size:16px;     
+                font-family: '微软雅黑';    
+              }
+            }
             .article-nav{
               display: flex;
               align-items: center;
+              justify-content: space-between;
               width: 100%;
               height: 30px;
               border-bottom:1px solid gray;
-              .edit{
-                padding-left:10px;
+              .block{
                 display: flex;
-                button{
-                  cursor: pointer;
-                  border:none;
-                  background-color: transparent;
-                  margin-left:10px;
+                align-items: center; 
+                .get-img{  
+                  position: relative;
+                  width: 100px;
+                  overflow: hidden;
                   display:flex;
-                  align-items: center;
-                }
+                  align-items: center;  
+                  input{
+                    opacity: 0;  
+                    position: absolute;
+                    left:0;
+                  }
+                }   
+              .pr{
+                padding:0 5px;
+                cursor: pointer;
+                border:none;
+                background-color: transparent;
+                display:flex;
+                align-items: center;   
+                font-size: 18px;    
+                .close{
+                  fill:#fff;
+                }   
+              }                                    
+                .edit{
+                  padding-left:10px;
+                  display: flex;
+                  button{
+                    cursor: pointer;
+                    border:none;
+                    background-color: transparent;
+                    margin-left:10px;
+                    display:flex;
+                    align-items: center;
+                  }
+                }                           
               }
+
             }
 
             .text{

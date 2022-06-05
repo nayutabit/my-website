@@ -83,3 +83,15 @@
 1. 完成了留言界面的前后端全部功能
 ### 20220601
 1. 完成了笔记界面的前端静态页面
+### 20220605
+1. 关于页面刷新后滚动条的位置会被保留，因此从主页回到这个页面时由于滚动条的变化会发生抖动,最后通过官方的文档解决了[官方文档](https://router.vuejs.org/zh/guide/advanced/scroll-behavior.html)
+```javascript
+  // 路由跳转后滚动条如果不在初识位置，会引发页面抖动，为了消除抖动，在跳转前一刻将滚动条手动初始化
+  scrollBehavior() {
+    return new Promise((resolve) => {
+      setTimeout(() => {
+        resolve({ top: 0 });
+      }, 550);
+    });
+  }
+```

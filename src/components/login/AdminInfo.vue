@@ -95,7 +95,6 @@ export default {
         }
       }
     }
-    // 上传图片到数据库
     function uploadAvatar(){
         if(dataUrl===''){
             alert('图片不能为空')
@@ -127,21 +126,6 @@ export default {
     }
     // 挂载时读取数据库上的头像数据
     let avatar=inject('avatar')
-    // onMounted(()=>{
-    //   axios.get(serverAddress+'/my/userinfo',{
-    //     headers:{
-    //       authorization:localStorage.getItem('token')
-    //     }              
-    //   }
-    //   ).then(res=>{
-    //     if(res.data.status===0){
-    //         avatar.value=res.data.data.user_pic
-    //     }
-    //   }).catch(err=>{
-    //     alert('发生错误')
-    //     console.log(err)
-    //   })      
-    // })
     return{
         isAdmin,
         logout,
