@@ -2,7 +2,7 @@
   <div class='footer'>
     <p>记笔记啦~</p>
     <div class="content">
-      <input class='title' type="text" placeholder="此处输入标题">
+      <input class='title' type="text" placeholder="此处输入标题" v-model='title'>
       <div class='text'>
         <textarea v-model='content' v-show='!isPreview'></textarea> 
         <!-- <div class='preview' v-html='preContent' v-show='isPreview'></div> -->
@@ -14,19 +14,19 @@
           <span>分类标签选择：</span>
             <label>
                 <span>算法</span>
-                <input type="radio" name='classify' checked>
+                <input type="radio" value=0 v-model='tag'>
             </label>
             <label>
                 <span>工具学习</span>
-                <input type="radio" name='classify'>
+                <input type="radio" value=1 v-model='tag'>
             </label>
             <label>
                 <span>项目经验</span>
-                <input type="radio" name='classify'>
+                <input type="radio" value=2 v-model='tag'>
             </label>         
             <label>
                 <span>其他</span>
-                <input type="radio" name='classify'>
+                <input type="radio" value=3 v-model='tag'>
             </label>                    
         </div>
         <div class='function'>
@@ -53,21 +53,30 @@
         
       </div>
     </div>    
-    <button class='btn'>添加笔记</button>
+    <button class='btn' @click='uploadNote'>添加笔记</button>
   </div>
 </template>
 
 <script>
+import axios from 'axios'
 import MdPreview from './MdPreview.vue'
-import {ref,reactive} from 'vue'
+import {ref,reactive,inject} from 'vue'
 export default {
 name:'NoteFooter',
 components:{
   MdPreview
 },
 setup(){
+  const isAdmin=inject('isAdmin')
+  const serverAddress=inject('serverAddress')
+  const allNotes=inject('allNotes')
   const isPreview=ref(false)
+  //文章内容
   const content=ref('')
+  //文章标题
+  const title=ref('')
+  //文章分类
+  const tag=ref(0)
   // 存储每个文章的图片
   const pictures=reactive([])
   // 插入图片:使用base64将图片和文章绑定在一起
@@ -80,15 +89,71 @@ setup(){
       reader.readAsDataURL(file)
       reader.onload=(event)=>{
           pictures.push(`[pic_${pictures.length}]:`+event.target.result+'\n')
-          content.value+=`![${e.target.files[0].name}][pic_${pictures.length-1}]\n`
+          content.value+=`\n\n![${e.target.files[0].name}][pic_${pictures.length-1}]\n`
       }
     }
+  }   
+  function initialNotes(){
+      axios.get(serverAddress+'/api/note/list').then(res=>{
+      if(res.data.status===0){
+        allNotes.splice(0)
+        for(const k of res.data.data)allNotes.push(k)
+        alert('笔记发布成功!')
+      }else{
+        alert('获取笔记列表失败!')
+        console.log(res)
+      }
+      }).catch(err=>{
+        console.log(err)
+      })   
   }  
+  // 删除没有被使用的图片
+  function clearPic(){
+    for(let i=0;i<pictures.length;i++){
+      if(!content.value.includes(`[pic_${i}]`))pictures[i]=''
+    }
+  }
+   function uploadNote(){
+     if(!isAdmin.value)alert('管理员才能发布笔记哦')
+     else{
+       if(content.value===''||title.value==='')alert('笔记内容或者标题不能为空')
+       else{
+        //  上传前清除没有被用到的图片
+         clearPic()
+        axios.post(serverAddress+'/my/note',{ 
+          content:content.value,
+          title:title.value,
+          tag:tag.value,
+          note_pic:pictures.join('\n\n')
+          
+        },{
+            headers:{ 
+              authorization:localStorage.getItem('token')
+            }
+          }).then(res=>{
+          if(res.data.status===0){
+              initialNotes()
+              content.value=''
+              title.value=''
+          }else{
+              alert('笔记发布失败')
+              console.log(res)
+          }
+        }).catch(err=>{
+          alert('发生错误')
+          console.log(err)
+        })
+       }
+     }
+   }
   return{
     isPreview,
     content,
     getPic,
-    pictures
+    pictures,
+    uploadNote,
+    title,
+    tag
   }
 }
 }

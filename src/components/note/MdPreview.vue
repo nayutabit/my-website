@@ -25,7 +25,7 @@ export default {
         smartLists: true,
         smartypants: false,
     });    
-    const content=ref(marked.parse(props.preContent))     
+    const content=ref(marked.parse(props.preContent))    
     return {
         content
     }

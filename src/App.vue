@@ -27,6 +27,7 @@ export default {
     let topicColor=reactive(['#f87b7b','#F76C6C',"#cf6363"])
     let avatar=ref('')
     let msgData=reactive([])
+    let allNotes=reactive([])
     const serverAddress='http://127.0.0.1:3007'
     //是否允许切换路由
     provide("allowChange",allowChange)
@@ -42,6 +43,8 @@ export default {
     provide("isAdmin",isAdmin)  
     //留言数据
     provide('msgData',msgData)
+    //笔记数据
+    provide('allNotes',allNotes)
     return{
       topicColor
     }

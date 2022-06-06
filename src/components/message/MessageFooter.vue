@@ -36,7 +36,7 @@ setup(){
         })   
    }
    function uploadMsg(){
-     if(!isAdmin)alert('管理员才能发布留言哦')
+     if(!isAdmin.value)alert('管理员才能发布留言哦')
      else{
        if(content.value==='')alert('留言不能为空')
        else{
