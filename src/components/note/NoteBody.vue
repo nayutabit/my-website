@@ -3,7 +3,7 @@
     <!-- 导航栏 -->
     <div class='nav'>
       <div class="classify">
-        <span>显示分类 : </span>
+        <span class='classify-title'>显示分类 : </span>
         <ul>
           <li class='label' v-for='k,index of tags' :key='index' @click='changeShow(index)'>
             <span>{{k}}</span>  
@@ -34,7 +34,7 @@
       <ul>
         <li v-for='k,index of presentNotes' :key='k.note_id' :class="{lighter:(index%2===1),fly:choseArticle===index}" v-show='choseArticle===index||choseArticle===-1'>
           <div class='title' @click='changeSelect(index,k.note_id)'>
-            <span class='title-text'>{{k.title}}</span>
+            <span class='title-text' id='article-title'>{{k.title}}</span>
             <span class='class'>| {{tags[k.tag]}} |</span>
             <svg class="icon" v-show='choseArticle!==index' viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="1300">
               <path
@@ -46,7 +46,7 @@
                 d="M488.96 344l-339.968 356.992a32.256 32.256 0 0 0-8.96 22.016c0 8 2.944 15.36 8.96 22.016v0.96c6.016 6.016 13.184 9.024 21.504 9.024 8.32 0 15.488-3.008 21.504-8.96l320-336 320 336c6.016 5.952 13.184 8.96 21.504 8.96 8.32 0 15.488-3.008 21.504-8.96v-1.024a32.256 32.256 0 0 0 8.96-22.016 32.256 32.256 0 0 0-8.96-22.016L534.976 344A31.168 31.168 0 0 0 512 335.04a31.168 31.168 0 0 0-23.04 8.96z"
               ></path>
             </svg>
-            <span class='date'>{{k.date}}</span>              
+            <span class='date' id='date'>{{k.date}}</span>              
           </div>
           <div class='article' v-show='choseArticle===index'>
             <div class='article-nav'>
@@ -97,7 +97,7 @@
                     取消编辑</button>                                                                                
                 </div>  
               </div>
-              <div class='block' v-show='isEdit'>
+              <div class='block' id='block2' v-show='isEdit'>
                 <span class='get-img' @change='getPic'>
                   <svg class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="13846" width="20" height="20">
                     <path
@@ -232,15 +232,12 @@ setup(){
     if(choseArticle.value===index){
       if(isEdit.value){
         if(confirm('当前正在编辑，是否撤销此次编辑')){
-          console.log('撤销了编辑')
           isEdit.value=false
-          choseArticle.value=-1
         }
-      }else{
-        choseArticle.value=-1
-        nowContent.value=''
-        nowNote_pic.value=''       
       }
+      choseArticle.value=-1
+      nowContent.value=''
+      nowNote_pic.value=''       
     }else{
       choseArticle.value=index
       axios.post(serverAddress+'/api/note/one',{
@@ -547,7 +544,6 @@ setup(){
             .article-content{
               height: 910px;
               textarea{
-                padding:0 10px;
                 height: 100%;
                 resize:none;
                 width: 100%;
@@ -633,5 +629,78 @@ setup(){
         }
       }
     }
+}
+
+@media (max-width:1200px){
+  .body{
+    .nav{
+      font-size:14px;
+      .search{
+        input{
+          width: 250px;
+        }
+      }
+    }
+  }
+}
+@media (max-width:768px){
+  .body{
+    .nav{
+      display:block;
+      .search{
+        input{
+          width: 100%;
+        }
+      }
+    }
+  }
+   #date{
+    display: none;
+  }  
+}
+@media (max-width:500px) {
+  .body{
+    .nav{
+      .classify{
+        .classify-title{
+          display: none;
+        }
+      }
+    }
+    .content>ul>li{
+      .article{
+        padding:0 0;      
+        .article-nav{
+          height: 100px;
+          justify-content: flex-start;
+          flex-wrap: wrap;
+          #block2{
+            height:40px;
+          }
+          .block{
+            flex-wrap: wrap;
+            height: 60px;
+            .edit{
+              padding:0;
+              margin-left:0;
+              button{
+                margin-left:0;
+                margin-right:10px;
+              }
+            }
+          }
+        }  
+        .article-content{
+          height: 850px;
+        }
+      }
+      .title>.icon{
+        margin-right:10px;
+      }
+    }
+  } 
+  #article-title{
+    font-size:12px;
+  }
 }
 </style>

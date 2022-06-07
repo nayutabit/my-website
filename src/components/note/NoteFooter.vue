@@ -11,7 +11,7 @@
       </div>
       <div class="foot">
         <div  class='select'>
-          <span>分类标签选择：</span>
+          <span>分类：</span>
             <label>
                 <span>算法</span>
                 <input type="radio" value=0 v-model='tag'>
@@ -113,10 +113,20 @@ setup(){
       if(!content.value.includes(`[pic_${i}]`))pictures[i]=''
     }
   }
+  //判断标题长度
+  function getLen(t){
+    let len=0
+    for(let i=0;i<t.length;i++){
+      if(t.charCodeAt(i)>=0&&t.charCodeAt(i)<=128)len+=1
+      else len+=2
+    }
+    return len
+  }
    function uploadNote(){
      if(!isAdmin.value)alert('管理员才能发布笔记哦')
      else{
        if(content.value===''||title.value==='')alert('笔记内容或者标题不能为空')
+       else if (getLen(title.value)>36)alert('标题过长')
        else{
         //  上传前清除没有被用到的图片
          clearPic()
@@ -267,4 +277,23 @@ setup(){
       }  
     }   
 }
+@media (max-width:500px) {
+  .footer>.content{
+    .text{
+      height: 730px;
+    }
+    .foot{
+      height: 60px;
+      flex-wrap: wrap;
+      font-size:14px;
+      .select{
+        height: 30px;
+      }
+      .function>button{
+        font-size:14px;
+      }
+    }
+  }
+}
+  
 </style>

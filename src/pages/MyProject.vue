@@ -1,6 +1,8 @@
 <template>
   <transition name='content' class='my-note' tag='div'>
-    <div>project页</div>  
+    <div>
+      <ProjectBoard/>
+    </div>
   </transition>
   <!-- 左边的门儿 -->
   <transition class='door left-door' tag='div' name='l-door'> 
@@ -13,9 +15,13 @@
 </template>
 
 <script >
+import ProjectBoard from '../components/project/ProjectBoard.vue'
 import {inject,onActivated} from 'vue'
 export default {
    name:'MyProject',
+   components:{
+     ProjectBoard
+   },
    setup(){
     const allowChange=inject('allowChange')     
      const highlight=inject('highlight')
@@ -42,7 +48,7 @@ export default {
   align-items: center;
   position: absolute;
   top:0;
-  height: 100%;
+  height: 2000px;
   left:20%;
   right:20%;    
   background-color: v-bind('topicColor[0]');
@@ -72,7 +78,7 @@ export default {
 
 .door{
   position: absolute;
-  height: 100%;
+  height: 2000px;
   width:50%; 
   background-color: v-bind('topicColor[1]'); 
   visibility: hidden;

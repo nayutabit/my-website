@@ -40,7 +40,6 @@ export default {
 .preview{
     overflow: auto;
     height: 100%;
-    padding:0 10px;  
     li{
         list-style: decimal inside;     
     }                
