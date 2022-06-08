@@ -53,7 +53,7 @@
               <div class='block'>
                 <p class='author'>作者:{{k.author_name}}</p>
                 <div class='edit' v-show='isAdmin===k.author_name'>            
-                  <button @click='startEdit()' v-show='!isEdit'>
+                  <button @click='startEdit(k.tag)' v-show='!isEdit'>
                     <svg class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="6292" width="15" height="15">
                       <path
                         d="M815.8 318.8L705.9 209c-19.5-19.5-19.5-51.2 0-70.7l59.7-59.7c19.5-19.5 51.2-19.5 70.7 0l109.8 109.8c19.5 19.5 19.5 51.2 0 70.7l-59.7 59.7c-19.5 19.6-51.1 19.6-70.6 0zM751.2 453.4c18.8-18.8 23.5-44.5 10.5-57.4L628.1 262.3c-12.9-12.9-38.6-8.2-57.4 10.5L81.3 749.2c-9.4 9.4-15.3 21.4-16.5 33.5l0.2 133.8c-2.4 25.2 17.4 45 42.6 42.6l133.8 1.1c12.1-1.2 24.2-7.1 33.5-16.5l476.3-490.3zM908.9 831.7H559.8c-13.4 0-26.2 5.3-35.6 14.8-17.1 17.2-45.3 46.3-68.8 70.7-15.2 15.8-4 42.1 17.9 42.1h435.3c28 0 50.9-22.9 50.9-50.9v-26.3c-0.2-27.7-22.8-50.4-50.6-50.4z"
@@ -121,7 +121,26 @@
             </div>  
             <div class='article-content'>
              <MdPreview :preContent="nowContent+'\n\n'+nowNote_pic" v-if='!isEdit&&nowContent'/>
-             <textarea v-if="isEdit&&!isPreview&&nowContent" v-model='draft'></textarea>   
+             <textarea v-show="isEdit&&!isPreview&&nowContent" v-model='draft'></textarea>  
+              <div  class='select' v-show="isEdit&&!isPreview&&nowContent">
+                <span id='select-title'>修改分类：</span>
+                  <label>
+                      <span>算法</span>
+                      <input type="radio" value=0 v-model='updateTag'>
+                  </label>
+                  <label>
+                      <span>工具学习</span>
+                      <input type="radio" value=1 v-model='updateTag'>
+                  </label>
+                  <label>
+                      <span>项目经验</span>
+                      <input type="radio" value=2 v-model='updateTag'>
+                  </label>         
+                  <label>
+                      <span>其他</span>
+                      <input type="radio" value=3 v-model='updateTag'>
+                  </label>                                 
+              </div> 
              <MdPreview :preContent="draft+'\n\n'+draft_pic.join('\n')" v-if='isPreview&&nowContent'/>        
             </div>               
           </div>            
@@ -175,6 +194,7 @@ setup(){
   // 当前选中note的文章和图片
   const nowContent=ref('')
   const nowNote_pic=ref('')
+  const updateTag=ref(0)
 
   function initialNotes(){
       axios.get(serverAddress+'/api/note/list').then(res=>{
@@ -256,9 +276,10 @@ setup(){
     }
   }
   // 开始编辑笔记
-  function startEdit(){
+  function startEdit(tag){
     isEdit.value=true
     draft.value=nowContent.value
+    updateTag.value=tag
     //将字符串展开成数组存在草稿图片中
     const picArr=nowNote_pic.value.split('\n\n')
     for(const k of picArr)draft_pic.push(k)
@@ -296,7 +317,8 @@ setup(){
       axios.post(serverAddress+'/my/note/update',{ 
         note_pic:draft_pic.join('\n'),
         content:draft.value,
-        note_id:id
+        note_id:id,
+        tag:updateTag.value
       },{
           headers:{ 
             authorization:localStorage.getItem('token')
@@ -304,6 +326,7 @@ setup(){
         }).then(res=>{
         if(res.data.status===0){
             alert('保存成功')
+          initialNotes()  
           isEdit.value=false;
           nowContent.value  =draft.value          
         }else{
@@ -416,7 +439,8 @@ setup(){
     draft_pic,
     getPic,
     nowContent,
-    nowNote_pic
+    nowNote_pic,
+    updateTag
   }
 },
 }
@@ -544,14 +568,23 @@ setup(){
             .article-content{
               height: 910px;
               textarea{
-                height: 100%;
+                height: 870px;
                 resize:none;
                 width: 100%;
                 border:none;
                 outline:none;    
                 font-size:16px;     
                 font-family: '微软雅黑';    
+                vertical-align: middle;
               }
+              .select{
+                height: 40px;
+                display: flex;
+                align-items: center;
+                input{
+                  margin-right:10px;
+                }
+              }              
             }
             .article-nav{
               display: flex;
@@ -647,11 +680,15 @@ setup(){
   .body{
     .nav{
       display:block;
+      font-size:12px;
       .search{
         input{
           width: 100%;
         }
       }
+      .classify>ul>.label{
+        margin-left:3px;
+      }      
     }
   }
    #date{
@@ -660,6 +697,9 @@ setup(){
 }
 @media (max-width:500px) {
   .body{
+    .page-number>span{
+      padding:0 3px;
+    }
     .nav{
       .classify{
         .classify-title{
@@ -692,6 +732,9 @@ setup(){
         }  
         .article-content{
           height: 850px;
+          textarea{
+            height: 810px;
+          }
         }
       }
       .title>.icon{
@@ -701,6 +744,9 @@ setup(){
   } 
   #article-title{
     font-size:12px;
+  }
+  #select-title{
+    display: none;
   }
 }
 </style>

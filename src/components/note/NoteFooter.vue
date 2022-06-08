@@ -11,7 +11,7 @@
       </div>
       <div class="foot">
         <div  class='select'>
-          <span>分类：</span>
+          <span class='select-title'>分类：</span>
             <label>
                 <span>算法</span>
                 <input type="radio" value=0 v-model='tag'>
@@ -145,6 +145,7 @@ setup(){
               initialNotes()
               content.value=''
               title.value=''
+              tag.value=0
           }else{
               alert('笔记发布失败')
               console.log(res)
@@ -288,6 +289,9 @@ setup(){
       font-size:14px;
       .select{
         height: 30px;
+        .select-title{
+          display: none;
+        }
       }
       .function>button{
         font-size:14px;

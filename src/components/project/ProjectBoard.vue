@@ -4,26 +4,30 @@
             <h1>项目</h1>
       </div> 
     <div class='product'>
-        <WebChapter v-show='selected===0||-1' />
-        <WebChapter v-show='selected===1||-1' />
-        <WebChapter v-show='selected===2||-1' />
-        <WebChapter v-show='selected===3||-1' />        
+        <OneChapter v-show='selected===0||selected===-1' @select='chosenOne' title='WEB' tag=0 />
+        <OneChapter v-show='selected===1||selected===-1' @select='chosenOne' title='移动端' tag=1 />
+        <OneChapter v-show='selected===2||selected===-1' @select='chosenOne' title='小程序' tag=2 />
+        <OneChapter v-show='selected===3||selected===-1' @select='chosenOne' title='其他' tag=3 />        
     </div>  
   </div>
 </template>
 
 <script>
 import {ref} from 'vue'
-import WebChapter from './WebChapter.vue'
+import OneChapter from './OneChapter.vue'
 export default {
 name:'ProjectBoard',
 components:{
-    WebChapter
+    OneChapter
 },
 setup(){
     const selected=ref(-1)
+    function chosenOne(index){
+        selected.value=index*1
+    }
     return{
-        selected
+        selected,
+        chosenOne
     }
 }
 }
