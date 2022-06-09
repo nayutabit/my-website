@@ -146,6 +146,7 @@ setup(){
               content.value=''
               title.value=''
               tag.value=0
+              alert('笔记发布成功')
           }else{
               alert('笔记发布失败')
               console.log(res)

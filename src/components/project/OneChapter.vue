@@ -1,5 +1,6 @@
 <template>
   <div class='chapter'>
+        <!-- 顶部导航部分 -->
         <div class='nav'>
             <p class='chapter-title'>{{title}}项目</p>
             <div class='edit'>
@@ -23,15 +24,21 @@
                 </svg>          
             </div>             
         </div>
-        <div class='list'>
+        <!-- 项目列表 -->
+        <div class='list' :class="{scroll:!isFold}">
+            <div class='null' v-show='projectList.length===0'>
+                 <img src="../../assets/null.png" alt="" >
+                 <p>空空如也</p>
+            </div>
+
             <ul class='items'>
-                <li v-for='k,index in 10' :key='index' :class='{nogap:(index+1)%4===0}'>
-                    <a href="#"> 
-                        <div class="img"></div>
-                        <div class='title'>神仔！我滴神仔！</div>
+                <li v-for='k,index in projectList' :key='k.id' >
+                    <a :href="k.src" target="blank"> 
+                        <img :src="surfaceList[index]" alt="">
+                        <div class='title'>{{k.title}}</div>
                     </a>
-                    <div class="mask" v-show='readyDel' @click='updateDelList(index)'>
-                            <svg v-show='delList.has(index)' class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="2866" >
+                    <div class="mask" v-show='readyDel' @click='updateDelList(k.id)'>
+                            <svg v-show='delList.has(k.id)' class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="2866" >
                             <path
                                 d="M447.711811 862.823134 127.068024 528.812921l82.21242-67.503417 185.41285 148.896168c76.017324-92.443435 244.701165-276.0655 477.455229-422.048315l19.565615 46.298466C678.076456 435.323667 503.19445 718.258621 447.711811 862.823134L447.711811 862.823134 447.711811 862.823134zM447.711811 862.823134"
                                 fill='#fff'
@@ -41,6 +48,7 @@
                 </li>
             </ul>  
         </div>    
+        <!-- 展开更多 -->
         <div class="foot">
             <div class='more' v-show='isFold' @click='unfold'>
                 展开更多
@@ -58,10 +66,12 @@
                 ></path>
                 </svg>               
             </div>            
-        </div>  
+        </div> 
+        <!-- 添加项目时整个组件罩一层 -->
         <div class='mask' v-show='isAdd'>
             <div class="add">
-                <input type="text" placeholder="输入项目网址" class='url' v-model='url'>                
+                <input type="text" placeholder="输入项目地址" class='url' v-model='url'> 
+                <input type="text" placeholder="输入项目标题" class='url' v-model='pTitle'>               
                 <!-- 上传图片部分 -->
                 <div class='chose-file'>
                     <span >选择封面</span>
@@ -75,50 +85,158 @@
 </template>
 
 <script>
-import {ref,inject,reactive} from 'vue'
+import axios from 'axios'
+import {ref,inject,reactive,onMounted} from 'vue'
 export default {
 name:'OneChapter',
 props:['title','tag'],
 emits:['select'],
 setup(props,context){
     const isAdmin=inject('isAdmin')
+    const serverAddress=inject('serverAddress')
+    const topicColor=inject('topicColor')     
+    // 是否处于折叠状态
     const isFold=ref(true)
-    const height=ref('400px')    
+    // 折叠状态的高度
+    const height=ref('400px')   
+    // 是否处于准备删除状态 
     const readyDel=ref(false)
-    const delList=reactive(new Set)
-    const topicColor=inject('topicColor')  
+    // 需要被删除的项目列表
+    const delList=reactive(new Set) 
+    // 是否处于准备增加项目状态
     const isAdd=ref(false)  
+    // 项目的超链接
     const url=ref('')
+    // 项目的标题
+    const pTitle=ref('')
+    // 该子类下所有项目的列表
+    const projectList=reactive([])
+    // 每个项目的图片，单独存储
+    const surfaceList=reactive([])
     let surface64=''
+    // 更新页面
+    function updateProject(){
+       axios.post(serverAddress+'/api/project',{
+        tag:props.tag
+      }).then(res=>{
+        if(res.data.status===0){
+            projectList.splice(0)
+          for(const k of res.data.data){
+              projectList.push(k)
+          }
+        }else{
+          console.log(res)
+        }
+        }).catch(err=>{
+          console.log(err)
+        }) 
+       axios.post(serverAddress+'/api/project/img',{
+        tag:props.tag
+      }).then(res=>{
+        if(res.data.status===0){
+            surfaceList.splice(0)
+          for(const k of res.data.data){
+              surfaceList.push(k.img)
+          }
+          console.log(surfaceList);
+        }else{
+          console.log(res)
+        }
+        }).catch(err=>{
+          console.log(err)
+        })         
+    }
+    // 挂载时更新页面
+    onMounted(()=>{
+       updateProject()
+    })
+    // 展开页面,展示更多部分
     function unfold(){
         isFold.value=false
         height.value='1830px'
         context.emit('select',props.tag)
     }
+    // 收起页面
     function fold(){
         isFold.value=true
         height.value='400px'
         context.emit('select',-1)
     }
+    // 删除时点击每个项目的逻辑
     function updateDelList(index){
         if(delList.has(index))delList.delete(index)
         else delList.add(index)
     }
+    // 撤销删除
     function delBack(){
         if(confirm('是否取消删除')){
             readyDel.value=false
             delList.clear()
         }
     }
+    // 确认删除，删除列表转字符串发送
     function confirmDel(){
         if(confirm('是否删除选中内容')){
-            console.log('已执行删除操作');
-            delList.clear()
+            axios.post(serverAddress+'/my/project/delete',{
+                set:Array.from(delList).join(',')
+            },{
+                headers:{ 
+                    authorization:localStorage.getItem('token')
+                }
+                }).then(res=>{
+                if(res.data.status===0){
+                    updateProject()  
+                    isAdd.value=false                     
+                    alert('删除成功')   
+                }else{
+                    console.log(res)
+                    alert('删除失败')
+                }
+            }).catch(err=>{
+                alert('发生错误')
+                console.log(err)
+            })            
             readyDel.value=false
         }
     }
+    // 添加项目
     function upload(){
-        
+        if(surface64===''){
+            alert('封面不能为空')
+        }else if(url.value===''){
+            alert('项目地址不能为空')
+        }else if(pTitle.value===''){
+            alert('项目标题不能为空')
+        }else{
+            //服务器地址暂定本机，上线后改云服务器
+            axios.post(serverAddress+'/my/project/add',{
+            src:url.value,
+            title:pTitle.value,
+            tag:props.tag,
+            img:surface64
+            },{
+            headers:{
+                authorization:localStorage.getItem('token')
+            }              
+            }
+            ).then(res=>{
+            if(res.data.status===0){
+                surface64=''
+                url.value=''
+                pTitle.value=''
+                isAdd.value=false
+                alert('上传项目成功')  
+                updateProject()                
+            }else{
+                alert('上传项目失败')
+            }
+            console.log(res)
+            }).catch(err=>{
+            alert('发生错误')
+            console.log(err)
+            })
+        }
+
     }
     // 从本地选择封面图片并转成base64
     function getSurface(e){
@@ -148,7 +266,10 @@ setup(props,context){
         isAdd,
         url,
         getSurface,
-        upload
+        upload,
+        pTitle,
+        projectList,
+        surfaceList
     }
 }
 }
@@ -159,7 +280,7 @@ setup(props,context){
     position: relative;
     width: 100%;
     background-color: rgba(255, 255, 255, 0.2);
-    padding:0 15px;
+    padding:0 1%;
     .nav{
         position: relative;
         width: 100%;
@@ -207,32 +328,47 @@ setup(props,context){
         }
     }
     .list{
+        position: relative;
         height:v-bind(height);
         overflow: hidden;
         padding-top:10px;
+        &.scroll{
+            overflow: auto;
+        }
+        .null{
+            position: absolute;
+            top:50%;
+            left:50%;
+            transform: translate(-50%,-50%);
+            img{
+                width: 150px;
+                height: 150px;
+            }
+            p{
+                width: 150px;
+                color:#fff;
+                text-align: center;
+                font:700 16px/20px "sofia-pro", sans-serif;                
+            }
+        }
         .items{
             width: 100%;
             display: flex;
             flex-wrap: wrap;
             li{
                 position: relative;
-                width: 23.5%;
+                width: 24%;
                 height: 190px;
-                margin-right:2%;
-                margin-bottom:10px;
-                &.nogap{
-                    margin-right:0;
-                }
+                margin:0 0.5% 10px 0.5%;
                 a{
                     display: inline-block;
                     width: 100%;
                     height: 100%;
                     transition:all 0.5s;
-                    .img{
+                    img{
                         width: 100%;
                         height: 150px;
-                        background-image: url('../../assets/shenzai.png');
-                        background-size: cover;
+                        vertical-align: middle;
                     }
                     .title{
                         padding-left:10px;
@@ -254,6 +390,10 @@ setup(props,context){
                     background-color: rgba(0, 0, 0, 0.479);
                     top:0;
                     left:0;
+                    .icon{
+                        width: 100%;
+                        height: 100%;
+                    }
                 }
             }
         }
@@ -324,10 +464,10 @@ setup(props,context){
                     opacity: 0;
                     height: 100%;
                     width: 100%;
+   
                 } 
             } 
             .upload,.chose-file>span{
-                cursor: pointer;
                 border:none;
                 display: inline-block;
                 height: 30px;
@@ -339,5 +479,45 @@ setup(props,context){
             }       
         }
     }
+}
+
+@media (max-width:1200px){
+.chapter{
+    .list{
+        .items{
+            li{
+                width: 32%;
+                height: 190px;
+                margin:0 0.66% 10px 0.66%;
+            }
+        }
+    }
+}
+}
+@media (max-width:768px){
+.chapter{
+    .list{
+        .items{
+            li{
+                width: 49%;
+                height: 190px;
+                margin:0 0.5% 10px 0.5%;
+            }
+        }
+    }
+}
+}
+@media (max-width:500px){
+.chapter{
+    .list{
+        .items{
+            li{
+                width: 99%;
+                height: 190px;
+                margin:0 0.5% 10px 0.5%;
+            }
+        }
+    }
+}
 }
 </style>
