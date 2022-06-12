@@ -40,6 +40,7 @@ setup(){
 const chosePage=ref(1)
     //  实现点击图片全屏放大的效果
     const isGrow=ref(-1)
+    // 存储的是需要被放大展示出来的那组图片
     const picUrl=reactive([])
 
     provide('isGrow',isGrow)
