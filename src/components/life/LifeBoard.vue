@@ -4,7 +4,7 @@
             <h1>生活</h1>
         </div> 
         <div class="nav">
-            <div class='add'>
+            <div class='add' @click='isAdd=true'>
                 <span>添加</span>
                 <svg class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="2833" width="24" height="24">
                     <path d="M512 938.666667C276.362667 938.666667 85.333333 747.637333 85.333333 512S276.362667 85.333333 512 85.333333s426.666667 191.029333 426.666667 426.666667-191.029333 426.666667-426.666667 426.666667z m0-64c200.298667 0 362.666667-162.368 362.666667-362.666667S712.298667 149.333333 512 149.333333 149.333333 311.701333 149.333333 512s162.368 362.666667 362.666667 362.666667z m32-394.666667h128a32 32 0 0 1 0 64H544v128a32 32 0 0 1-64 0V544H352a32 32 0 0 1 0-64h128V352a32 32 0 0 1 64 0v128z"
@@ -23,10 +23,12 @@
         <span @click='chosePage=chosePage===10?10:chosePage+1'>下一页</span>      
         </div>  
         <PictureMask v-if='isGrow>=0'/>
+        <AddMask v-if='isAdd'/>
   </div>
 </template>
 
 <script>
+import AddMask from './AddMask.vue'
 import PictureMask from './PictureMask.vue'
 import PieceOfLife from './PieceOfLife.vue' 
 import {ref,provide,reactive} from 'vue'
@@ -34,7 +36,8 @@ export default {
 name:'ProjectBoard',
 components:{
     PieceOfLife,
-    PictureMask
+    PictureMask,
+    AddMask
 },
 setup(){
 const chosePage=ref(1)
@@ -42,12 +45,14 @@ const chosePage=ref(1)
     const isGrow=ref(-1)
     // 存储的是需要被放大展示出来的那组图片
     const picUrl=reactive([])
-
+    const isAdd=ref(false)
     provide('isGrow',isGrow)
     provide('picUrl',picUrl)
+    provide('isAdd',isAdd)
 return {
     chosePage,
-    isGrow
+    isGrow,
+    isAdd
 }
 }
 }

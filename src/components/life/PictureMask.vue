@@ -37,7 +37,6 @@ export default {
                 let step=Math.abs(rest)>1?(rest<0?Math.floor(rest/2):Math.ceil(rest/2))/10:rest
                 rest-=step
                 moveLeft.value=end*-100-rest+'%'
-                console.log(step);
                 if(rest===0){
                     moveOver=true
                     clearInterval(timer)
@@ -56,7 +55,7 @@ export default {
             }            
         }
         function rightGo(){
-            if(moveOver&&isGrow.value<picUrl.length){
+            if(moveOver&&isGrow.value+1<picUrl.length){
                 moveOver=false
                 move(isGrow.value,isGrow.value+1)
                 isGrow.value+=1

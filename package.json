@@ -16,6 +16,7 @@
     "highlight.js": "^11.5.1",
     "less-loader": "^10.2.0",
     "marked": "^4.0.16",
+    "nanoid": "^4.0.0",
     "request": "^2.88.2",
     "resolve-url": "^0.2.1",
     "source-map-resolve": "^0.5.3",
