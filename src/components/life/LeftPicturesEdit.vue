@@ -1,9 +1,10 @@
 <template>
     <div class='lefter' ref='picBox' @selectstart.prevent @mouseleave="moveEnd()">
+        <div v-show='picList.length===0' class='none'>添加点图片吧</div>        
         <ul class="pic">
             <transition-group name="flip-list">
-                <li class='item' v-for='k,index of picList' :key='k' :class='{transparent:transparentIndex===index}' >
-                    <span class='img' :style="`background-image:url(${k})`" @mousedown="readyMove(index,$event)" @touchstart='mobileMove(index,$event)'></span>
+                <li class='item' v-for='k,index of picList' :key='k.id' :class='{transparent:transparentIndex===index}' >
+                    <span class='img' :style="`background-image:url(${k.url})`" @mousedown="readyMove(index,$event)" @touchstart='mobileMove(index,$event)'></span>
                     <svg class="delete" @click.stop='readyDel(index)' viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="7139" >
                       <path d="M96 128h832v64H96zM128 256h768l-89.024 704H217.024z"></path>
                       <path d="M384 64h256v96h-256z"></path>
@@ -16,24 +17,29 @@
                     d="M487.11 22.62C234.37 35.27 32.08 239.41 22.37 492.91c-11.08 289.13 219.6 519.8 508.73 508.73 253.5-9.71 457.64-212.01 470.29-464.75C1016.18 241.05 782.95 7.82 487.11 22.62z m316.93 489.47c0 16.57-13.43 30-30 30h-229c-0.94 0-1.69 0.76-1.69 1.69v228.94c0 16.57-13.43 30-30 30h-0.06c-16.57 0-30-13.43-30-30V543.78c0-0.94-0.76-1.69-1.69-1.69h-229c-16.57 0-30-13.43-30-30v-0.06c0-16.57 13.43-30 30-30h229c0.94 0 1.69-0.76 1.69-1.69V251.28c0-16.57 13.43-30 30-30h0.06c16.57 0 30 13.43 30 30v229.06c0 0.94 0.76 1.69 1.69 1.69h229c16.57 0 30 13.43 30 30v0.06z"
                 ></path>
                 </svg>   
-                <input type="file">                             
+                <input type="file" accept="image/png, image/jpeg" @change='getPic'>                             
             </li>
         </ul>
         <!-- 长按图片后生成一个可拖动的图片 -->
         <transition name='move-cube'>
-             <div class='mover' v-if='transparentIndex>=0' :style="`background-image:url(${nowPic})`"  @mouseup="moveEnd()" @mouseleave="moveEnd()"></div>
+             <div class='mover' v-if='transparentIndex>=0' :style="`background-image:url(${nowPic})`"  @mouseup="moveEnd()" @mouseleave="moveEnd()" @touchend='moveEnd()'></div>
         </transition> 
     </div>  
 </template>
 
 <script>
+import {compressAccurately} from 'image-conversion'
+import {nanoid} from 'nanoid'
 import {inject,reactive,ref} from 'vue'
 export default {
 name:'LeftPicturesEdit',
 setup(){ 
     const mainList=inject('picList')  
-    const picList=reactive([])    
-    picList.splice(0,mainList.length,...mainList)
+    const picList=inject('editList')  
+    picList.splice(0)
+    for(const k of mainList){
+        picList.push({url:k,id:nanoid()})
+    }
     const isGrow=inject('isGrow')
     //放大查看的图片们
     const picUrl=inject('picUrl')  
@@ -60,13 +66,13 @@ setup(){
         else if(nowY>(picBox.value.clientHeight-5)/3*2)coord[1]=(picBox.value.clientHeight-5)/3*2+'px'
         else coord[1]=picOriginCoord[1]+e.clientY-mouseOriginCoord[1]+'px'
         nowWhite.value=getArea(nowX,nowY)
-        // 如果当前位置没有图片，则指向最后一个图片的位置
+        // 如果当前位置没有图片，则指向最后图片的位置
         nowWhite.value=Math.min(nowWhite.value,picList.length-1)
         // 当移动到一个新的区域时，图片的顺序发生改变
         // 核心
         if(nowWhite.value!==transparentIndex.value){
             picList.splice(transparentIndex.value,1)               
-            picList.splice(nowWhite.value,0,nowPic.value)              
+            picList.splice(nowWhite.value,0,{url:nowPic.value,id:nanoid()})              
             transparentIndex.value=nowWhite.value
         }
     }
@@ -75,7 +81,7 @@ setup(){
         // 计算X轴方向每个格子的宽度
         const W=(picBox.value.clientWidth-5)/3
         // 计算X轴方向每个格子的宽度   
-        const H=(picBox.value.clientHeight-5)/3
+        const H=(picBox.value.clientHeight-5)/ 3
         if(x<0.5*W&&y<0.5*H)return 0
         else if(x>=0.5*W&&x<1.5*W&&y<0.5*H)return 1
         else if(x>=1.5*W&&y<0.5*H)return 2
@@ -95,7 +101,7 @@ setup(){
     //长按后保存所按住的图片的索引，并生成其左上角坐标和放大图片的长宽,并保存鼠标点击位置的原始坐标  
     function readyMove(index,event){
         picBox.value.timer=setTimeout(()=>{isClick=false},200)
-        nowPic.value=picList[index]
+        nowPic.value=picList[index].url
         transparentIndex.value=index
         picOriginCoord[0]=(index%3)*((picBox.value.clientWidth-5)/3)
         picOriginCoord[1]=(Math.floor(transparentIndex.value/3))*((picBox.value.clientHeight-5)/3)
@@ -112,7 +118,10 @@ setup(){
     // 查看大图
     function grow(index){
         isGrow.value=index
-        picUrl.splice(0,picUrl.length,...picList)       
+        picUrl.splice(0,picUrl.length)   
+        for(const k of picList){
+            picUrl.push(k.url)
+        }    
     }    
     // 结束图片的移动，如果是点按则放大图片
     function moveEnd(){
@@ -125,12 +134,22 @@ setup(){
         transparentIndex.value=-1
     }   
     function readyDel(index){
-        if(confirm('是否删除改图片?')){
+        if(confirm('是否删除该图片?')){
             picList.splice(index,1)
-            console.log('已经删除该图片');
         }
     }
 
+    // 获取图片
+    function getPic(e){
+        const file=e.target.files[0]
+        const reader=new FileReader()        
+        compressAccurately(file,100).then(res=>{
+            reader.readAsDataURL(res)
+            reader.onload=(event)=>{
+                picList.push({url:event.target.result,id:nanoid()})
+            }             
+        })
+    }
     // 移动端事件
     function mobileMove(index,e){
         readyMove(index,e.targetTouches[0])
@@ -150,7 +169,8 @@ setup(){
         figure, 
         nowPic,
         readyDel,
-        mobileMove
+        mobileMove,
+        getPic
     }   
 }
 }
@@ -161,7 +181,17 @@ setup(){
     position: relative;
     width: 40%;
     height: 100%;
-    padding:5px;      
+    padding:5px;    
+    .none{
+        position: absolute;
+        left:0;
+        top:0;
+        width: 100%;
+        height: 100%;
+        text-align: center;
+        line-height: 310px;
+        color:#fff;
+    }  
     .mover{
         position: absolute;
         height:v-bind('figure[1]');
@@ -253,6 +283,9 @@ setup(){
         width: 100%;
         height:170px;
         padding:0 0 5px 0;
+        .none{
+            line-height: 170px;
+        }
     }
 }
 </style>

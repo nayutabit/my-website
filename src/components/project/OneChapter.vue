@@ -138,7 +138,6 @@ setup(props,context){
           for(const k of res.data.data){
               surfaceList.push(k.img)
           }
-          console.log(surfaceList);
         }else{
           console.log(res)
         }

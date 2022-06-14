@@ -1,6 +1,6 @@
 <template>
   <div class="piece-of-life">
-      <div class="edit" v-show='isAdmin' >
+      <div class="edit" v-show='isAdmin===lifeInfo.author_name' >
           <span v-show='!isEdit' @click='del'>
             <svg class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="7139" width="15" height="15">
               <path d="M96 128h832v64H96zM128 256h768l-89.024 704H217.024z"></path>
@@ -38,32 +38,41 @@
         <textarea v-model='textEdit' v-show='isEdit' class="content"></textarea>
       </div>
       <div class="info">
-        <span class='author'>administrator</span>        
-        <span class='date'>2022-6-10 15:19:45</span>
+        <span class='author'>{{lifeInfo.author_name}}</span>        
+        <span class='date'>{{lifeInfo.date}}</span>
       </div>
 
   </div>
 </template>
 
 <script>
+import axios from 'axios'
 import LeftPicturesEdit from './LeftPicturesEdit.vue'
 import LeftPictures from './LeftPicturs.vue'
-import {inject,reactive,ref,provide} from 'vue'
+import {inject,reactive,ref,provide,onMounted} from 'vue'
 export default {
 name:'PieceOfLife',
 components:{
   LeftPictures,
   LeftPicturesEdit
 },
-setup(){
+props:['lifeInfo'],
+emits:['update1'],
+setup(props,context){
   const isAdmin=inject('isAdmin')
+  const serverAddress=inject('serverAddress')
   const picList=reactive([])
+  const editList=reactive([])
   const isEdit=ref(false)
-  const textContent=ref('谁是我们的敌人？谁是我们的朋友？这个问题是革命的首要问题。中国过去一切革命斗争成效甚少，其基本原因就是因为不能团结真正的朋友，以攻击真正的敌人。革命党是群众的向导，在革命中未有革命党领错了路而革命不失败的。')
+  const textContent=ref('')
   const textEdit=ref('')
-  for(let i=0;i<8;i++)picList.push(`./shenzi${i}.jpg`)
   provide('isEdit',isEdit)
   provide('picList',picList)
+  provide('editList',editList)
+  onMounted(()=>{
+    initialPicList()
+    textContent.value=props.lifeInfo.content
+  })
   // 编辑
   function startEdit(){
     isEdit.value=true
@@ -72,12 +81,52 @@ setup(){
   // 删除
   function del(){
     if(confirm('确认删除此条？')){
-      console.log('已执行删除操作');
+      axios.post(serverAddress+'/my/life/delete',{ 
+        id:props.lifeInfo.id
+      },{
+          headers:{ 
+            authorization:localStorage.getItem('token')
+          }
+        }).then(res=>{
+        if(res.data.status===0){
+            alert('删除成功')            
+            context.emit('update1')
+        }else{
+            alert('删除失败')
+            console.log(res)
+        }
+      }).catch(err=>{
+        alert('发生错误')
+        console.log(err)
+      })
     }
   }
   function saveEdit(){
     if(confirm('确认保存更改？')){
-      console.log('已执行保存操作');
+      const picString=[]
+      for(const k of editList)picString.push(k.url)      
+      axios.post(serverAddress+'/my/life/update',{ 
+        id:props.lifeInfo.id,
+        pic:picString.join('\n'),
+        content:textEdit.value
+      },{
+          headers:{ 
+            authorization:localStorage.getItem('token')
+          }
+        }).then(res=>{
+        if(res.data.status===0){
+            alert('更改完成')            
+            initialPicList()
+            textContent.value=textEdit.value
+            isEdit.value=false
+        }else{
+            alert('更改失败')
+            console.log(res)
+        }
+      }).catch(err=>{
+        alert('发生错误')
+        console.log(err)
+      })
     }    
   }
   function exitEdit(){
@@ -86,6 +135,22 @@ setup(){
       console.log('已执行取消操作');
     }    
   }  
+  // 通过生活id获取图片
+  function initialPicList(){
+        axios.post(serverAddress+'/api/life/pic',{ 
+          id:props.lifeInfo.id
+        }).then(res=>{
+          if(res.data.status===0){
+            picList.splice(0,picList.length,...(res.data.data.pic.split('\n')))
+          }else{
+              alert('获取图片失败')
+              console.log(res)
+          }
+        }).catch(err=>{
+          alert('发生错误')
+          console.log(err)
+        })    
+  }
   return {
     isAdmin,
     picList,
@@ -95,7 +160,7 @@ setup(){
     startEdit,
     del,
     saveEdit,
-    exitEdit
+    exitEdit,
   }
 }
 }

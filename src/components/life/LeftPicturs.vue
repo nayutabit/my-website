@@ -1,7 +1,7 @@
 <template>
     <div class='lefter' ref='picBox' @selectstart.prevent>
         <ul class="pic" :class="{type1:picList.length>=5,type0:picList.length>=2&&picList.length<=4}">
-                <li class='item' v-for='k,index of picList' :key='k'  @click="grow(index)">
+                <li class='item' v-for='k,index of picList' :key='index'  @click="grow(index)">
                     <span class='img' :style="`background-image:url(${k})`"></span>
                 </li> 
         </ul>

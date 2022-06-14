@@ -26,7 +26,7 @@ import {inject,ref} from 'vue'
 export default {
     name:'PictureMask',
     setup(){
-        const scroll=ref('')    
+        const scroll=ref(document.documentElement.scrollTop+'px')    
         const isGrow=inject('isGrow')
         const picUrl=inject('picUrl') 
         const moveLeft=ref(isGrow.value*-100+'%')

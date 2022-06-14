@@ -157,6 +157,7 @@
 </template>
 
 <script>
+import {compressAccurately} from 'image-conversion'
 import axios from 'axios'
 import MdPreview from './MdPreview.vue'
 import {ref,reactive,watchEffect,inject,onMounted} from 'vue'
@@ -341,18 +342,21 @@ setup(){
   }
   // 编辑时插入图片
   function getPic(e){
-  const file=e.target.files[0]
-  if(file.size>204800){
-    alert('请传入200kb以内的图片')
-  }else{
+    const file=e.target.files[0]
     const reader=new FileReader()
+    compressAccurately(file,100).then(res=>{
+      reader.readAsDataURL(res)
+      reader.onload=(event)=>{
+          draft_pic.push(`[pic_${draft_pic.length}]:`+event.target.result+'\n')
+          draft.value+=`\n\n![${e.target.files[0].name}][pic_${draft_pic.length-1}]\n`
+      }             
+    })    
     reader.readAsDataURL(file)
     reader.onload=(event)=>{
         draft_pic.push(`[pic_${draft_pic.length}]:`+event.target.result+'\n')
         draft.value+=`\n\n![${e.target.files[0].name}][pic_${draft_pic.length-1}]\n`
     }
-  }
-}   
+  }   
   // 删除没有被使用的图片
   function clearPic(){
     for(let i=0;i<draft_pic.length;i++){

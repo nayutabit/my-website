@@ -28,7 +28,7 @@ export default {
     let avatar=ref('')
     let msgData=reactive([])
     let allNotes=reactive([])
-    const serverAddress='http://127.0.0.1:3007'
+    const serverAddress='https://nayutabit.cn:3007'
     //是否允许切换路由
     provide("allowChange",allowChange)
     //导航栏高光位置
