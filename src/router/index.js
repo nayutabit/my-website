@@ -1,7 +1,7 @@
 // 这里是路由器
 
 // 引入vue-router
-import { createRouter, createWebHashHistory } from "vue-router";
+import { createRouter, createWebHistory } from "vue-router";
 
 import MyNotes from "../pages/MyNotes.vue";
 import HomePage from "../pages/HomePage.vue";
@@ -11,14 +11,10 @@ import MyMsg from "../pages/MyMsg.vue";
 import AdLogin from "../pages/AdLogin.vue";
 import ContactMe from "../pages/ContactMe.vue";
 const router = new createRouter({
-  history: createWebHashHistory(),
+  history: createWebHistory(),
   routes: [
     {
       path: "/",
-      redirect: "/home"
-    },
-    {
-      path: "/home",
       name: "homepage",
       component: HomePage
     },

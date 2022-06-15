@@ -62,4 +62,9 @@ setup(){
       padding:0 10px;
   }
 }
+@media (max-width:500px) {
+  .project-board .header h1{
+    display: none;
+  }
+}
 </style>

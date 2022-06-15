@@ -3,12 +3,13 @@
   <div class="piece-of-life">
       <div class="main" >
         <LeftPicturesEdit/>
-        <textarea v-model='textEdit' class="content" placeholder="说点什么吧"></textarea>
+        <textarea v-model='textEdit' class="content" placeholder="说点什么吧" maxlength="150"></textarea>
       </div>
       <div class='upload'>
           <button @click='readyUpload'>确认发表</button>
           <button @click='noUpload'>取消发表</button>
       </div>
+      <div class="count">{{textEdit.length}}/150</div>
   </div>
 </div>  
 </template>
@@ -140,6 +141,11 @@ setup(props,context){
                 cursor: pointer;
             }
         }
+        .count{
+          position: absolute;
+          bottom:53px;
+          right:20px;    
+        }         
     }
 }
 @media (max-width: 500px){
@@ -171,6 +177,9 @@ setup(props,context){
       .author{
         font-size: 14px;
       }
+    }
+    .count{
+      bottom: 225px;
     }
   }
 }

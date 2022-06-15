@@ -151,4 +151,14 @@ return {
       }
     }    
 }
+@media (max-width:500px) {
+  .life-board{
+    .header h1{
+        display: none;
+    }
+    .page-number>span{
+      padding:0 3px;
+    }
+  } 
+}
 </style>

@@ -286,6 +286,19 @@ setup(){
         .none{
             line-height: 170px;
         }
+        
+    }
+}
+@media (max-width:1200px){
+    .lefter .pic .item .delete{
+        display: block;
+        position: absolute;
+        right:0;
+        top:0;
+        width: 25px;
+        height: 25px;
+        fill:rgba(148, 148, 148, 0.377);
+        cursor: pointer;
     }
 }
 </style>

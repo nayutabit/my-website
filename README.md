@@ -95,3 +95,25 @@
     });
   }
 ```
+### 20220614
+1. 主体功能基本完工了，剩下的边角料和体验优化了
+2. 目前移动网页页面的问题
+ 1） 网页滚动似乎无法被识别？右上角的导航和picMask都无法正常跟随页面移动
+ 2） 生活部分的图片删除功能用不了
+### 20220616
+1. vue3通过connect-history-api-fallback解决history模式刷新后404的问题，这种方法在本地可以，部署到服务器上还是不行，最后还是通过配置ngix解决的[官方文档](https://router.vuejs.org/zh/guide/essentials/history-mode.html)
+   nodejs中
+   ```javascript
+    const history = require("connect-history-api-fallback");
+    app.use(history());      
+   ```
+   vue.config.js中
+   ```javascript
+      // 开启这个后connect-history-api-fallback才会生效
+      configureWebpack: {
+        devServer: {
+          historyApiFallback: true
+        }
+      }      
+   ```
+   

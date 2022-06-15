@@ -41,4 +41,9 @@ components:{
       }
   }
 }
+@media (max-width:500px) {
+  .note-board .header h1{
+    display: none;
+  }
+}
 </style>

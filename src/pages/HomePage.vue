@@ -64,6 +64,11 @@
   </div>
   </transition>
   <HomeMsg/> 
+  <div class='reference'>
+    <span>Copyright nayutabit All Rights Reserved</span>
+    <span> 渝公网安备 50010802004645号</span>
+    <a href="https://beian.miit.gov.cn" target="_blank" > 渝ICP备2022006095号-1</a>
+  </div>
 </template>
 
 <script>

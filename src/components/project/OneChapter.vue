@@ -34,7 +34,8 @@
             <ul class='items'>
                 <li v-for='k,index in projectList' :key='k.id' >
                     <a :href="k.src" target="blank"> 
-                        <img :src="surfaceList[index]" alt="">
+                        <span class='img' :style="`background-image:url(${surfaceList[index]})`"></span>
+                        <!-- <img :src="surfaceList[index]" alt=""> -->
                         <div class='title'>{{k.title}}</div>
                     </a>
                     <div class="mask" v-show='readyDel' @click='updateDelList(k.id)'>
@@ -85,6 +86,7 @@
 </template>
 
 <script>
+import {compressAccurately} from 'image-conversion'
 import axios from 'axios'
 import {ref,inject,reactive,onMounted} from 'vue'
 export default {
@@ -198,6 +200,15 @@ setup(props,context){
             readyDel.value=false
         }
     }
+    //判断标题长度
+    function getLen(t){
+        let len=0
+        for(let i=0;i<t.length;i++){
+        if(t.charCodeAt(i)>=0&&t.charCodeAt(i)<=128)len+=1
+        else len+=2
+        }
+        return len
+    }
     // 添加项目
     function upload(){
         if(surface64===''){
@@ -206,6 +217,8 @@ setup(props,context){
             alert('项目地址不能为空')
         }else if(pTitle.value===''){
             alert('项目标题不能为空')
+        }else if(getLen(pTitle.value)>30){
+            alert('标题过长')
         }else{
             //服务器地址暂定本机，上线后改云服务器
             axios.post(serverAddress+'/my/project/add',{
@@ -239,16 +252,14 @@ setup(props,context){
     }
     // 从本地选择封面图片并转成base64
     function getSurface(e){
-      const file=e.target.files[0]
-      if(file.size>204800){
-        alert('请传入200kb以内的图片')
-      }else{
-        const reader=new FileReader()
-        reader.readAsDataURL(file)
-        reader.onload=(event)=>{
-            surface64=event.target.result
-        }
-      }
+        const file=e.target.files[0]
+        const reader=new FileReader() 
+        compressAccurately(file,100).then(res=>{
+            reader.readAsDataURL(res)
+            reader.onload=(event)=>{
+                surface64=event.target.result
+            }             
+        })                    
     }
     return{
         isFold,
@@ -364,9 +375,12 @@ setup(props,context){
                     width: 100%;
                     height: 100%;
                     transition:all 0.5s;
-                    img{
+                    .img{
+                        display: inline-block;
                         width: 100%;
                         height: 150px;
+                        background-size: cover;
+                        background-position:center;
                         vertical-align: middle;
                     }
                     .title{

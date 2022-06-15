@@ -35,13 +35,13 @@
         <LeftPictures v-if="!isEdit"/>
         <LeftPicturesEdit v-else/>
         <p class="content" v-show='!isEdit'>{{textContent}}</p>
-        <textarea v-model='textEdit' v-show='isEdit' class="content"></textarea>
+        <textarea v-model='textEdit' v-show='isEdit' class="content" maxlength="150"></textarea>
       </div>
       <div class="info">
         <span class='author'>{{lifeInfo.author_name}}</span>        
         <span class='date'>{{lifeInfo.date}}</span>
       </div>
-
+      <div class="count" v-show='isEdit'>{{textEdit.length}}/150</div>
   </div>
 </template>
 
@@ -221,6 +221,11 @@ setup(props,context){
       font-size: 18px;
     }
   } 
+  .count{
+    position: absolute;
+    bottom:53px;
+    right:20px;    
+  }  
 }
 @media (max-width: 500px){
   .piece-of-life{
@@ -249,6 +254,9 @@ setup(props,context){
         font-size: 14px;
       }
     }
+    .count{
+      bottom: 190px;
+    }    
   }
 }
 </style>
