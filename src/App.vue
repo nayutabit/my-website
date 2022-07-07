@@ -28,7 +28,8 @@ export default {
     let avatar=ref('')
     let msgData=reactive([])
     let allNotes=reactive([])
-    const serverAddress='http://127.0.0.1:3007'
+    // const serverAddress='http://127.0.0.1:3007'
+    const serverAddress='https://nayutabit.cn:3007'
     //是否允许切换路由
     provide("allowChange",allowChange)
     //导航栏高光位置
@@ -90,19 +91,7 @@ body {
   position: relative;
   overflow-x: hidden;
 }
-.reference{
-  position: absolute;
-  width: 100%;
-  bottom:10px;
-  text-align: center;
-  color:rgba(255, 255, 255, 0.5);
-  font: 300 12px/1 "sofia-pro", sans-serif;
-  animation: slide-in-blurred-bottom 0.5s 4s cubic-bezier(0.230, 1.000, 0.320, 1.000) both;
-  cursor: default;
-  a{
-     color:rgba(255, 255, 255, 0.5);
-  }
-}
+
 @keyframes slide-in-blurred-bottom {
   0% {
     transform: translateY(1000px) scaleY(2.5) scaleX(0.2);
@@ -117,11 +106,5 @@ body {
     opacity: 1;
   }
 }
-@media (max-width: 500px){
-  .reference{
-    display: flex;
-    flex-direction: column-reverse;
-    align-items: center;
-  }
-}
+
 </style>

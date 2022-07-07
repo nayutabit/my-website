@@ -455,7 +455,7 @@ setup(props,context){
     overflow: hidden;
 }
 .article-area-enter-active{
-    animation: slide-in-blurred-top 0.5s 0.7s cubic-bezier(0.230, 1.000, 0.320, 1.000) both;    
+    animation: slide-in-blurred-top 0.5s 0.5s cubic-bezier(0.230, 1.000, 0.320, 1.000) both;    
 }
 .article-area-leave-active{
     animation: slide-out-blurred-top 0.5s cubic-bezier(0.755, 0.050, 0.855, 0.060) both;

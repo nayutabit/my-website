@@ -251,7 +251,7 @@ setup(){
     }
 }
 .note-content-enter-active{
-  animation: slide-in-blurred-left 0.5s 0.7s cubic-bezier(0.230, 1.000, 0.320, 1.000) both;
+  animation: slide-in-blurred-left 0.5s 0.5s cubic-bezier(0.230, 1.000, 0.320, 1.000) both;
 }
 .note-content-leave-active{
   animation: slide-out-blurred-left 0.5s cubic-bezier(0.755, 0.050, 0.855, 0.060) both;

@@ -64,10 +64,12 @@
   </div>
   </transition>
   <HomeMsg/> 
-  <div class='reference'>
-    <span>Copyright nayutabit All Rights Reserved</span>
-    <span> 渝公网安备 50010802004645号</span>
-    <a href="https://beian.miit.gov.cn" target="_blank" > 渝ICP备2022006095号-1</a>
+  <div class='bottom-info'>
+    <div class='reference'>
+      <span>Copyright nayutabit All Rights Reserved</span>
+      <span> 渝公网安备 50010802004645号</span>
+      <a href="https://beian.miit.gov.cn" target="_blank" > 渝ICP备2022006095号-1</a>
+    </div>
   </div>
 </template>
 
@@ -229,7 +231,23 @@ export default {
     }       
   }
 }
+.bottom-info{
+    position: absolute;
+    width: 100%;
+    bottom:10px;
+    overflow: hidden;
+  .reference{
+    text-align: center;
+    color:rgba(255, 255, 255, 0.5);
+    font: 300 12px/1 "sofia-pro", sans-serif;
+    animation: slide-in-blurred-bottom 0.5s 4s cubic-bezier(0.230, 1.000, 0.320, 1.000) both;
+    cursor: default;
+    a{
+      color:rgba(255, 255, 255, 0.5);
+    }
+}
 
+}
 // waterAction是水渍的效果，每个水渍单独做的动画，折磨
 @keyframes waterAction1{
   0%{
@@ -463,10 +481,18 @@ export default {
   }
 }
 }
+@media (max-width: 500px){
+
+}
 @media (max-width:500px){
 .backLogo{
   width: 275px;
 }
+  .bottom-info .reference{
+    display: flex;
+    flex-direction: column-reverse;
+    align-items: center;
+  }
 @keyframes bridgeAction{
   0%{
       visibility: visible;

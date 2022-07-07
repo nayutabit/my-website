@@ -28,6 +28,7 @@
 </template>
 
 <script>
+import axios from 'axios'
 import {compressAccurately} from 'image-conversion'
 import {nanoid} from 'nanoid'
 import {inject,reactive,ref} from 'vue'
@@ -35,7 +36,8 @@ export default {
 name:'LeftPicturesEdit',
 setup(){ 
     const mainList=inject('picList')  
-    const picList=inject('editList')  
+    const picList=inject('editList') 
+    const serverAddress=inject('serverAddress') 
     picList.splice(0)
     for(const k of mainList){
         picList.push({url:k,id:nanoid()})
@@ -144,6 +146,26 @@ setup(){
         const file=e.target.files[0]
         const reader=new FileReader()        
         compressAccurately(file,100).then(res=>{
+            // 使用formData直接上传file格式的图片
+            // const formData = new FormData();
+            // formData.append("pic", file);
+            // axios
+            //     .post(serverAddress+"/my/picture", formData,{
+            //   headers:{ 
+            //     authorization:localStorage.getItem('token')
+            //   }
+            // })
+            //     .then((res) => {
+            //     if (res.data.status === 0) {
+            //         console.log("成功添加图片");
+            //     } else {
+            //         console.log(res);
+            //     }
+            //     })
+            //     .catch((err) => {
+            //     alert("发生错误");
+            //     console.log(err);
+            //     });         
             reader.readAsDataURL(res)
             reader.onload=(event)=>{
                 picList.push({url:event.target.result,id:nanoid()})
